@@ -1,0 +1,169 @@
+#!/usr/bin/env zsh
+#
+runname=`basename $0`
+
+case $runname in
+    dcm)
+        repository=(github1 github2 github3 github4 github5)  # remote repository name
+        branch=(develop stable master)                        # branch name
+        bakrepo=(bak)                                         # backup repository name
+        ;;
+    ob)
+        repository=(obnotes)
+        branch=(master)
+        bakrepo=(bak)
+        ;;
+    *)
+        repository=(origin)
+        branch=(master)
+        bakrepo=(bak)
+        ;;
+esac
+
+fgit () {
+    if [[ "x$1" != "x" ]]; then
+        run=$1; shift
+    else
+        run=pull
+    fi
+
+    if [[ "x$1" != "x" ]]; then
+        repo=($1); shift
+    else
+        repo=($repository[@])
+    fi
+
+    if [[ "x$1" != "x" ]]; then
+        bran=($1); shift
+    else
+        bran=($branch[@])
+    fi
+
+    if [[ "x$1" != "x" ]]; then
+        force="--$1"; shift
+    else
+        force=
+    fi
+
+    echo
+    echo "* Git $run --- "
+    echo "      repo = ${repo[@]}: ${#repo[*]}"
+    echo "      bran = ${bran[@]}: ${#bran[*]}"
+    
+    mission=0
+    total=$[ ${#repo[@]} * ${#bran[@]} ]
+    
+    for re in ${repo[@]}; do
+        for br in ${bran[@]}; do
+            let mission++
+            echo 
+            echo "----------------------------------------------------"
+            echo " [$mission/$total]: "
+            echo "         $run from/to repository:$re/$br ... "
+            echo "         ****                    *************** "
+            echo
+            git checkout $br
+            git $run $re $br $force
+        done
+    done
+
+    echo "----------------------------------------------------"
+}
+
+fpush () {
+    if [[ "x$1" != "x" ]]; then
+        fr=$1; shift
+    else
+        fr=
+    fi
+
+    for re in ${repository[@]}; do
+        for br in ${branch[@]}; do
+            fgit push $re $br $fr
+        done
+    done
+}
+
+fpull () {
+    for re in ${repository[@]}; do
+        fgit pull $re
+    done
+}
+
+ffetch () {
+    for re in ${repository[@]}; do
+        fgit fetch $re
+    done
+}
+
+fbak () {
+    if [[ $1 == "" ]]; then
+        run=push
+    else
+        run=$1; shift
+    fi
+    
+    for re in ${bakrepo[@]}; do
+        fgit $run $re
+    done
+}
+
+gck () {
+    if [[ `git branch --list $1` ]]; then
+        git switch $1
+    else
+        git switch -c $1
+    fi
+}
+
+alias gdev='gck develop'
+alias gstb='gck stable'
+alias gmas='gck master'
+alias gf1='gck f1'
+
+alias gbv='git branch -vv'
+alias grv='git remote -vv'
+alias gst='git status'
+alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
+alias gmd='git merge develop'
+
+# list top 10 files (most large size)
+alias gl10='git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -10'
+
+# delete files thoroughly!!!
+grmt () {
+    echo "delete file/directory thoroughly, so be carefully doing it!!!"
+    echo -n " * please input yes/no: "
+    read continue
+    if [[ $continue == "yes" ]]; then
+        git filter-branch  --force --index-filter "git rm -rf --cached --ignore-unmatch $1" --prune-empty --tag-name-filter cat -- --all
+
+        # 删除original文件夹
+        git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
+        rm -rf .git/refs/original/
+        # 修剪旧的reflog条目
+        git reflog expire --expire=now --all
+        # 验证数据库中对象的连接性和有效性
+        git fsck --full --unreachable
+        # 打包解压缩的对象。 删除冗余的对象
+        git repack -A -d
+        # 清理不必要的文件并优化本地存储库
+        git gc --aggressive --prune=now
+    fi
+}
+
+alias gclean='git gc --aggressive --prune=now'
+
+#-
+
+case $runname in
+    ob)
+        alias cdob='cd /Users/fengh/Documents/RDS/NOTES/Obsidian'
+        alias obsync='rsync -alvzrtopg --progress --delete  /Users/fengh/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/RDS . && git add . && git commit -a -m "sync on `date`"'
+        alias gbakob='fgit push'
+        alias obwork='cdob && obsync; gbakob'
+        ;;
+    *)
+        ;;
+esac

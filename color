@@ -1,0 +1,38 @@
+#!/usr/bin/env zsh
+#
+# command substitions with color
+#
+
+runname=`basename $0`
+
+# exa:  ls命令的替代品，可以彩色输出目录内容，更容易辨识。
+alias ll='exa --long --git'
+alias lla='exa --all --long --git'
+alias ll2='exa --tree --level=2'
+
+# broot: 可以看作增强版的ls替代品，实际是一个终端里面的文件管理器。
+alias br='broot -sdph'
+
+# bat: cat命令的替代品，输出文本文件的内容，并且带有cat所没有的代码高亮和行号。
+alias bt='bat'
+
+# fd: find命令的替代品，用于文件名搜索。
+#     fd dog /tmp
+alias fid='fd'
+
+# ripgrep: grep命令的替代品，用来搜索文件内容。
+#     rg foo *.md
+alias rgp='rg'
+
+# duf: df命令的替代品，用来显示磁盘占用情况。
+
+# ncdu: du命令的替代品，用来显示每个目录占用的大小。
+alias duh='ncdu'
+
+# htop: top命令的替代品，用来显示系统的实时状态。
+
+# procs: ps命令的替代品，用来高亮显示进程信息。
+alias ps='procs'
+
+# httpie: curl 的替代品，用来发出 HTTP 请求。
+#     http PUT example.com hello=world 

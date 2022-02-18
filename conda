@@ -1,0 +1,32 @@
+##!/usr/bin/env zsh
+#
+runname=`basename $0`
+
+case $runname in
+  mconda)
+    source /opt/miniconda3/etc/profile.d/conda.sh
+    export PATH=/opt/miniconda3/bin:$PATH
+    ;;
+  aconda)
+    source /opt/anaconda3/etc/profile.d/conda.sh
+    export PATH=/opt/anaconda3/bin:$PATH
+    ;;
+  conda)
+    source /opt/anaconda3/etc/profile.d/conda.sh
+    export PATH=/opt/anaconda3/bin:$PATH
+esac
+
+condabin=`dirname $CONDA_EXE`
+
+alias condaup='conda update conda --all'
+alias acondaup='conda update anaconda --all'
+
+alias cdea='conda deactivate'
+alias cact='conda activate'
+alias cinfo='conda info'
+alias cei='conda env list'
+
+alias jnb=$condabin/jupyter-notebook
+alias jlab=$condabin/jupyter-lab
+alias pynv="Open /Applications/Anaconda-Navigator.app"
+

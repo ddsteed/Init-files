@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+runname=`basename $0`
+
+case $runname in
+  foxysrc)
+    home=/opt/ros/foxy_src/install
+    ;;
+  foxy)
+    home=/opt/ros/foxy
+    ;;
+esac
+
+os=`uname`
+
+if [[ $os == "Darwin" ]]; then
+   source ~/Init/x86
+fi
+
+source $home/setup.zsh

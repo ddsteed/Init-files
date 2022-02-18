@@ -1,0 +1,36 @@
+u20=192.168.64.12
+
+mln () {
+  multipass launch --name $1 -c 4 -m 8G -d 50G
+}
+
+shm () {
+  ssh -X -Y f1@$u20
+}
+
+ms () {
+  multipass shell u20
+}
+
+mstop () {
+  multipass stop u20
+}
+
+mst () {
+  multipass start u20
+}
+
+mrs () {
+  multipass restart u20
+}
+
+min () {
+  multipass info u20
+}
+
+alias mls='multipass ls'
+alias mf='multipass find'
+
+mm () {
+    multipass mount $1 $2
+}
