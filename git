@@ -130,6 +130,9 @@ alias gmd='git merge develop'
 
 # list top 10 files (most large size)
 alias gl10='git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -10'
+glarge () {
+  git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -$1
+}
 
 # delete files thoroughly!!!
 grmt () {
