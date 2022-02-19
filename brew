@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 #
 runname=`basename $0`
 

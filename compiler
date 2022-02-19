@@ -1,0 +1,17 @@
+#!/usr/bin/env  zsh
+#
+
+runname=`basename $0`
+
+case $runname in
+  intel)
+        source /opt/intel/oneapi/setvars.sh 
+        ;;
+  llvm)
+        export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib $LDFLAGS"
+        export CPPFLAGS="-I/usr/local/opt/llvm/include $CPPFLAGS"
+        export PATH="/usr/local/opt/llvm/bin:$PATH"
+        ;;
+  *)
+        ;;
+esac
