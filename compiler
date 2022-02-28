@@ -3,6 +3,8 @@
 
 runname=`basename $0`
 
+alias abrew='arch -arm64e /opt/homebrew/bin/brew'
+
 case $runname in
   intel)
         source /opt/intel/oneapi/setvars.sh 
@@ -11,6 +13,16 @@ case $runname in
         export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib $LDFLAGS"
         export CPPFLAGS="-I/usr/local/opt/llvm/include $CPPFLAGS"
         export PATH="/usr/local/opt/llvm/bin:$PATH"
+        ;;
+  java)
+        export JAVA_HOME=$(abrew --prefix openjdk)
+        export JRE_HOME=$JAVA_HOME/jre
+        export CLASSPATH=.:$JAVA_HOME/libexec:$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
+        export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+
+        export MAVEN_HOME=$(abrew --prefix maven)
+
+        export PATH=$(abrew --prefix spring-boot)/bin:$PATH
         ;;
   *)
         ;;
