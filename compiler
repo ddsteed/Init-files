@@ -24,6 +24,8 @@ case $runname in
 
         export PATH=$(abrew --prefix spring-boot)/bin:$PATH
         export PATH=$(abrew --prefix gradle)/bin:$PATH
+
+        alias idea='/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea'
         ;;
   *)
         ;;

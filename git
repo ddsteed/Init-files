@@ -120,6 +120,7 @@ alias gdev='gck develop'
 alias gstb='gck stable'
 alias gmas='gck master'
 alias gf1='gck f1'
+alias gdf1='git branch -D f1'
 
 alias gbv='git branch -vv'
 alias grv='git remote -vv'
@@ -166,6 +167,9 @@ case $runname in
         alias obsync='rsync -alvzrtopg --progress --delete  /Users/fengh/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/RDS . && git add . && git commit -a -m "sync on `date`"'
         alias gbakob='fgit push'
         alias obwork='cdob && obsync; gbakob'
+        ;;
+    dcm)
+        alias dcmclone='git clone /Users/fengh/Research/DCM'
         ;;
     *)
         ;;

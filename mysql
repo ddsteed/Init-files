@@ -3,16 +3,25 @@ runname=`basename $0`
 
 alias abrew='arch -arm64e /opt/homebrew/bin/brew'
 
-mysql.server start
+case $runname in
+    mysql)
+        mysql.server start
 
-sql () {
-    abrew services $1 mysql
-}
+        sql () {
+            abrew services $1 mysql
+        }
 
-sqls () {
-    mysql.server $1
-}
+        sqls () {
+            mysql.server $1
+        }
 
-sqlr () {
-    mysql -u root
-}
+        sqlr () {
+            mysql -u root -p
+        }
+        ;;
+    redis)
+        redis () {
+            abrew services $1 redis
+        }
+        ;;
+esac
