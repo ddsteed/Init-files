@@ -129,6 +129,8 @@ alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%
 
 alias gmd='git merge develop'
 
+alias gpush='git push github'
+
 # list top 10 files (most large size)
 alias gl10='git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -10'
 glarge () {
