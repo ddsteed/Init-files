@@ -161,6 +161,8 @@ grmt () {
 
 alias gclean='git gc --aggressive --prune=now'
 
+alias gabandon='git checkout . && git clean -xdf'
+
 #-
 
 case $runname in
