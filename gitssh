@@ -2,4 +2,11 @@
 #
 runname=`basename $0`
 
-git config --global url."git@github.com:".insteadOf "https://github.com/"
+case $runname in
+  gitssh)
+    git config --global url."git@github.com:".insteadOf "https://github.com/"
+    ;;
+  githttp)
+    git config --global url.https://github.com/.insteadOf ssh://git@github.com
+    ;;
+esac
