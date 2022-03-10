@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+#
+runname=`basename $0`
+
+git config --global url."git@github.com:".insteadOf "https://github.com/"
