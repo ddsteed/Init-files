@@ -33,8 +33,8 @@ case $runname in
 
         ngfat () {
             user=$1
-            passwd=$2
-            ssh -X -Y ${user}@${ngfatip} -p${passwd}
+            port=$2
+            ssh -X -Y ${user}@${ngfatip} -p${port}
         }
 
         alias ngdcm='ngfat dcm $port'
@@ -47,7 +47,7 @@ cpfat () {
             fat=$fat1
             ;;
         "2")
-            fat=$fat1
+            fat=$fat2
             ;;
         ng)
             fat=dcm@0.tcp.ap.ngrok.io
