@@ -1,0 +1,49 @@
+#!/usr/bin/env  zsh
+#
+#-----------------------------------------------------------------------
+# This script is to update all Mac OS softwares
+#
+# Author: Hao Feng (F1)
+# Date:   Mar. 13, 2022
+#
+# Copyright (c) 2022, RDS
+#-----------------------------------------------------------------------
+
+echo
+echo " Update Mac OS system & softwares ... "
+echo " ------------- "
+echo
+softwareupdate --all --install --force
+
+echo
+echo " Update Homebrew (arm) applications ... "
+echo " ------------- "
+echo
+source  ~/Init/arm
+yes yes | abrewup
+abrew cleanup
+
+echo
+echo " Update Homebrew (x86_64) applications ... "
+echo " ------------- "
+echo
+source ~/Init/x86
+yes yes | ibrewup
+ibrew cleanup
+
+echo
+echo " Update anaconda ... "
+echo " ------------- "
+echo
+source ~/Init/aconda
+yes yes | condaup
+yes yes | acondaup
+conda clean --all
+
+echo
+echo " Update miniconda ... "
+echo " ------------- "
+echo
+source ~/Init/mconda
+yes yes | condaup
+conda clean --all
