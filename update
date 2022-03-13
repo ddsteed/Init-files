@@ -1,7 +1,7 @@
 #!/usr/bin/env  zsh
 #
 #-----------------------------------------------------------------------
-# This script is to update all Mac OS softwares
+# This script is to update all Mac/Linux softwares
 #
 # Author: Hao Feng (F1)
 # Date:   Mar. 13, 2022
@@ -9,41 +9,70 @@
 # Copyright (c) 2022, RDS
 #-----------------------------------------------------------------------
 
-echo
-echo " Updating Mac OS system & softwares ... "
-echo " ------------- "
-echo
-softwareupdate --all --install --force
+if [[ `uname` == "Darwin" ]]; then
+    update=(mac abrew ibrew aconda mconda)
+elif [[ `uname` == "Linux" ]]; then
+    update=(apt)
+fi
 
-echo
-echo " Updating Homebrew (arm) applications ... "
-echo " ------------- "
-echo
-source  ~/Init/arm
-yes yes | abrewup
-abrew cleanup
+echoline () {
+    echo "--------------------------------------------"
+}
+    
+num=0
+total=${#update[@]}
 
-echo
-echo " Updating Homebrew (x86_64) applications ... "
-echo " ------------- "
-echo
-source ~/Init/x86
-yes yes | ibrewup
-ibrew cleanup
+for mission in ${update[@]}; do
+    let num++
+    echo
+    echoline
+    echo " [$num/$total]: "
 
-echo
-echo " Updating anaconda ... "
-echo " ------------- "
-echo
-source ~/Init/aconda
-yes yes | condaup
-yes yes | acondaup
-conda clean --all
-
-echo
-echo " Updating miniconda ... "
-echo " ------------- "
-echo
-source ~/Init/mconda
-yes yes | condaup
-conda clean --all
+    case $mission in
+        mac)
+            echo " Updating Mac OS system & softwares ... "
+            echoline
+            
+            softwareupdate --all --install --force
+            ;;
+        abrew)
+            echo " Updating Homebrew (arm) applications ... "
+            echoline
+            
+            source  ~/Init/arm
+            yes yes | abrewup
+            abrew cleanup
+            ;;
+        ibrew)
+            echo " Updating Homebrew (x86_64) applications ... "
+            echoline
+            
+            source ~/Init/x86
+            yes yes | ibrewup
+            ibrew cleanup
+            ;;
+        aconda)
+            echo " Updating anaconda ... "
+            echoline
+            
+            source ~/Init/aconda
+            yes yes | condaup
+            yes yes | acondaup
+            conda clean --all
+            ;;
+        mconda)
+            echo " Updating miniconda ... "
+            echoline
+            
+            source ~/Init/mconda
+            yes yes | condaup
+            conda clean --all
+            ;;
+        apt)
+            echo " Updating Ubuntu Linux apt softwares ... "
+            echoline
+            sudo apt-get update -y && sudo apt-get upgrade -y
+            sudo apt-get autoremove
+            ;;
+    esac
+done
