@@ -1,7 +1,10 @@
-#
+#!/usr/bin/env zsh
+
 runname=`basename $0`
 
-alias abrew='arch -arm64e /opt/homebrew/bin/brew'
+abrew () {
+    arch -arm64e /opt/homebrew/bin/brew $@
+}
 
 case $runname in
     mysql)

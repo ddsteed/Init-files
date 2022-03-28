@@ -1,5 +1,5 @@
-##!/usr/bin/env zsh
-#
+#!/usr/bin/env zsh
+
 runname=`basename $0`
 
 case $runname in
@@ -18,15 +18,39 @@ esac
 
 condabin=`dirname $CONDA_EXE`
 
-alias condaup='conda update conda --all'
-alias acondaup='conda update anaconda --all'
+condaup () {
+  conda update conda --all
+}
 
-alias cdea='conda deactivate'
-alias cact='conda activate'
-alias cinfo='conda info'
-alias cei='conda env list'
+acondaup () {
+  conda update anaconda --all
+}
 
-alias jnb=$condabin/jupyter-notebook
-alias jlab=$condabin/jupyter-lab
-alias pynv="Open /Applications/Anaconda-Navigator.app"
+cdea () {
+  conda deactivate
+}
+
+cact () {
+  conda activate
+}
+
+cinfo () {
+  conda info
+}
+
+cei () {
+  conda env list
+}
+
+jnb () {
+  $condabin/jupyter-notebook
+}
+
+jlab () {
+  $condabin/jupyter-lab
+}
+
+pynv () {
+  Open /Applications/Anaconda-Navigator.app
+}
 

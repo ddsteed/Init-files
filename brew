@@ -1,31 +1,36 @@
-#
+#!/usr/bin/env   zsh
+
 runname=`basename $0`
 
 case $runname in
-  brew | arm)
-    alias abrew='arch -arm64e /opt/homebrew/bin/brew'
-
-    export HOMEBREW_PREFIX="/opt/homebrew";
-    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
-    export HOMEBREW_REPOSITORY="/opt/homebrew";
-    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-    export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
-
-    eval $(/opt/Homebrew/bin/brew shellenv) #ckbrew
-    ;;
-  x86)
-    alias ibrew='arch -x86_64 /usr/local/bin/brew'
-
-    export HOMEBREW_PREFIX="/usr/local/homebrew";
-    export HOMEBREW_CELLAR="/usr/local/homebrew/Cellar";
-    export HOMEBREW_REPOSITORY="/usr/local/homebrew";
-    export PATH="/usr/local/homebrew/bin:/usr/local/homebrew/sbin${PATH+:$PATH}";
-    export MANPATH="/usr/local/homebrew/share/man${MANPATH+:$MANPATH}:";
-    export INFOPATH="/usr/local/homebrew/share/info:${INFOPATH:-}";
-
-    eval $(/usr/local/Homebrew/bin/brew shellenv) #ckbrew
-    ;;
+    brew | arm)
+        abrew () {
+            arch -arm64e /opt/homebrew/bin/brew $@
+        } 
+        
+        export HOMEBREW_PREFIX="/opt/homebrew";
+        export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+        export HOMEBREW_REPOSITORY="/opt/homebrew";
+        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+        export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+        export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+        
+        eval $(/opt/Homebrew/bin/brew shellenv) #ckbrew
+        ;;
+    x86)
+        ibrew () {
+            arch -x86_64 /usr/local/bin/brew $@
+        }
+        
+        export HOMEBREW_PREFIX="/usr/local/homebrew";
+        export HOMEBREW_CELLAR="/usr/local/homebrew/Cellar";
+        export HOMEBREW_REPOSITORY="/usr/local/homebrew";
+        export PATH="/usr/local/homebrew/bin:/usr/local/homebrew/sbin${PATH+:$PATH}";
+        export MANPATH="/usr/local/homebrew/share/man${MANPATH+:$MANPATH}:";
+        export INFOPATH="/usr/local/homebrew/share/info:${INFOPATH:-}";
+        
+        eval $(/usr/local/Homebrew/bin/brew shellenv) #ckbrew
+        ;;
 esac
 
 abi () {
@@ -36,8 +41,13 @@ abrewup () {
     abrew update && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
 }
 
-alias abrewin='arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"'
-alias abrewun='arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"'
+abrewin () {
+    arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+}
+
+abrewun () {
+  arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
+}
 
 
 abrewclean () {
@@ -52,8 +62,13 @@ ibrewup () {
     ibrew update && ibrew upgrade && ibrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
 }
 
-alias ibrewin='arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"'
-alias ibrewun='arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"'
+brewin () {
+  arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+}
+
+ibrewun () {
+  arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
+}
 
 ibrewclean () {
   ibrew ls --$1 | xargs brew remove -f --ignore-dependencies

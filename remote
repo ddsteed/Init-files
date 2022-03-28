@@ -24,8 +24,8 @@ case $runname in
         port=22
     ;;
     ngrok)
-        ngfatip="0.tcp.ap.ngrok.io"
-        port=14697
+        ngfatip="0.tcp.ngrok.io"
+        port=17777
         
         ngrok_ini () {
             nohup ngrok tcp 22 --log=stdout > "$HOME/.ngrok2/ngrok.log" --region ap &
