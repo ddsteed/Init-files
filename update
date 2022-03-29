@@ -31,13 +31,11 @@ for mission in ${update[@]}; do
     case $mission in
         mac)
             echo " Updating Mac OS system & softwares ... "
-            echoline
             
             softwareupdate --all --install --force
             ;;
         abrew)
             echo " Updating Homebrew (arm) applications ... "
-            echoline
             
             source  ~/Init/arm
             yes yes | abrewup
@@ -45,7 +43,6 @@ for mission in ${update[@]}; do
             ;;
         ibrew)
             echo " Updating Homebrew (x86_64) applications ... "
-            echoline
             
             source ~/Init/x86
             yes yes | ibrewup
@@ -53,7 +50,6 @@ for mission in ${update[@]}; do
             ;;
         aconda)
             echo " Updating anaconda ... "
-            echoline
             
             source ~/Init/aconda
             yes yes | condaup
@@ -62,7 +58,6 @@ for mission in ${update[@]}; do
             ;;
         mconda)
             echo " Updating miniconda ... "
-            echoline
             
             source ~/Init/mconda
             yes yes | condaup
@@ -70,7 +65,7 @@ for mission in ${update[@]}; do
             ;;
         apt)
             echo " Updating Ubuntu Linux apt softwares ... "
-            echoline
+
             sudo apt-get update -y && sudo apt-get upgrade -y
             sudo apt-get autoremove
             ;;

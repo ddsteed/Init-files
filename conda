@@ -19,7 +19,7 @@ esac
 condabin=`dirname $CONDA_EXE`
 
 condaup () {
-  conda update conda --all
+  conda update --all
 }
 
 acondaup () {
