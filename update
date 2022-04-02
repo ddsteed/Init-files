@@ -16,7 +16,7 @@ elif [[ `uname` == "Linux" ]]; then
 fi
 
 echoline () {
-    echo "--------------------------------------------"
+    echo "--------------------------------------------------"
 }
     
 num=0
@@ -26,31 +26,35 @@ for mission in ${update[@]}; do
     let num++
     echo
     echoline
-    echo " [$num/$total]: "
+    echo "[$num/$total]: "
 
     case $mission in
         mac)
             echo " Updating Mac OS system & softwares ... "
+            echo
             
             softwareupdate --all --install --force
             ;;
         abrew)
             echo " Updating Homebrew (arm) applications ... "
-            
+            echo
+
             source  ~/Init/arm
             yes yes | abrewup
             abrew cleanup
             ;;
         ibrew)
             echo " Updating Homebrew (x86_64) applications ... "
-            
+            echo
+
             source ~/Init/x86
             yes yes | ibrewup
             ibrew cleanup
             ;;
         aconda)
             echo " Updating anaconda ... "
-            
+            echo
+
             source ~/Init/aconda
             yes yes | condaup
             yes yes | acondaup
@@ -58,13 +62,15 @@ for mission in ${update[@]}; do
             ;;
         mconda)
             echo " Updating miniconda ... "
-            
+            echo
+
             source ~/Init/mconda
             yes yes | condaup
             conda clean --all --yes
             ;;
         apt)
             echo " Updating Ubuntu Linux apt softwares ... "
+            echo
 
             sudo apt-get update -y && sudo apt-get upgrade -y
             sudo apt-get autoremove
