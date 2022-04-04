@@ -63,7 +63,7 @@ fgit () {
             echo "         ****                    *************** "
             echo
             git checkout $br
-            git $run $re $br $force
+            git $run $re $br $force --tags
         done
     done
 
@@ -129,10 +129,24 @@ alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%
 
 alias gmd='git merge develop'
 
-alias gpush='git push github'
+gtest () {
+    git add .
+    git commit -a -m "test ... "
+}
+
+gpush () {
+    git push github --tags
+}
+
+gfat () {
+    git push fat$1
+}
 
 # list top 10 files (most large size)
-alias gl10='git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -10'
+gl10 () {
+    git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -10
+}
+
 glarge () {
   git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -$1
 }
