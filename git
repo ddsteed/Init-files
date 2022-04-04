@@ -129,9 +129,13 @@ alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%
 
 alias gmd='git merge develop'
 
-gtest () {
+gcom () {
     git add .
-    git commit -a -m "test ... "
+    git commit -a -m "$1"
+}
+
+gtest () {
+    gcom "test ..."
 }
 
 gpush () {
