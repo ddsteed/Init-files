@@ -139,7 +139,7 @@ gtest () {
 }
 
 gpush () {
-    git push github --tags
+    git push github --follow-tags
 }
 
 gfat () {
@@ -192,6 +192,7 @@ case $runname in
         ;;
     dcm)
         alias dcmclone='git clone /Users/fengh/Research/DCM'
+        alias fpull3='fgit pull github3 develop'
         ;;
     *)
         ;;

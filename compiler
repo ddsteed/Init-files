@@ -9,26 +9,31 @@ abrew () {
 
 case $runname in
   intel)
-        source /opt/intel/oneapi/setvars.sh 
-        ;;
+      source /opt/intel/oneapi/setvars.sh 
+      ;;
   llvm)
-        export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib $LDFLAGS"
-        export CPPFLAGS="-I/usr/local/opt/llvm/include $CPPFLAGS"
-        export PATH="/usr/local/opt/llvm/bin:$PATH"
-        ;;
+      export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib $LDFLAGS"
+      export CPPFLAGS="-I/usr/local/opt/llvm/include $CPPFLAGS"
+      export PATH="/usr/local/opt/llvm/bin:$PATH"
+      ;;
   java)
-      # export JAVA_HOME=$(abrew --prefix openjdk)
-        export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
-        export CLASSPATH=.:$JAVA_HOME/libexec:$JAVA_HOME/lib:$CLASSPATH
-        export PATH=$JAVA_HOME/bin:$PATH
-
-        export MAVEN_HOME=$(abrew --prefix maven)
-
-        export PATH=$(abrew --prefix spring-boot)/bin:$PATH
-        export PATH=$(abrew --prefix gradle)/bin:$PATH
-
-        alias idea='/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea'
-        ;;
+      export JAVA_HOME=$(abrew --prefix openjdk)
+      # export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+      export CLASSPATH=.:$JAVA_HOME/libexec:$JAVA_HOME/lib:$CLASSPATH
+      export PATH=$JAVA_HOME/bin:$PATH
+      
+      export MAVEN_HOME=$(abrew --prefix maven)
+      export M2_HOME=$(abrew --prefix maven)
+      export PATH=$MAVEN_HOME/bin:$PATH
+      
+      export MAVEND_HOME=$(abrew --prefix mvnd)
+      export PATH=$MAVEND_HOME/bin:$PATH
+      
+      export PATH=$(abrew --prefix spring-boot)/bin:$PATH
+      export PATH=$(abrew --prefix gradle)/bin:$PATH
+      
+      alias idea='/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea'
+      ;;
   *)
-        ;;
+      ;;
 esac
