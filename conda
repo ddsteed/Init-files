@@ -3,6 +3,10 @@
 runname=`basename $0`
 
 case $runname in
+  ai)
+    source /opt/miniconda3/etc/profile.d/conda.sh
+    conda activate /opt/AI/envs
+    ;;
   mconda)
     source /opt/miniconda3/etc/profile.d/conda.sh
     export PATH=/opt/miniconda3/bin:$PATH
