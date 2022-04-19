@@ -2,22 +2,38 @@
 
 runname=`basename $0`
 
+init_conda () {
+    env=$1
+    if [[ -f $env/etc/profile.d/conda.sh ]]; then
+        source $env/etc/profile.d/conda.sh
+        conda activate $env
+    else
+        echo
+        echo "$env does NOT exist, create it firstly."
+        echo "----------------------------------------------------"
+        echo
+    fi
+}
+
 case $runname in
-  ai)
-    source /opt/miniconda3/etc/profile.d/conda.sh
-    conda activate /opt/AI/envs
-    ;;
+  ai | aiconda)
+      init_conda /opt/AI/envs
+      ;;
+  rconda)
+      init_conda /opt/ros/envs
+      ;;
   mconda)
-    source /opt/miniconda3/etc/profile.d/conda.sh
-    export PATH=/opt/miniconda3/bin:$PATH
-    ;;
+      init_conda /opt/miniconda3
+      export PATH=/opt/miniconda3/bin:$PATH
+      ;;
   aconda)
-    source /opt/anaconda3/etc/profile.d/conda.sh
-    export PATH=/opt/anaconda3/bin:$PATH
-    ;;
+      init_conda /opt/anaconda3
+      export PATH=/opt/anaconda3/bin:$PATH
+      ;;
   conda)
-    source /opt/anaconda3/etc/profile.d/conda.sh
-    export PATH=/opt/anaconda3/bin:$PATH
+      init_conda /opt/anaconda3
+      export PATH=/opt/anaconda3/bin:$PATH
+      ;;
 esac
 
 condabin=`dirname $CONDA_EXE`
@@ -42,7 +58,7 @@ cinfo () {
   conda info
 }
 
-cei () {
+cel () {
   conda env list
 }
 

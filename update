@@ -10,7 +10,7 @@
 #-----------------------------------------------------------------------
 
 if [[ `uname` == "Darwin" ]]; then
-    update=(mac abrew ibrew aconda mconda)
+    update=(mac abrew ibrew aconda mconda ai)
 elif [[ `uname` == "Linux" ]]; then
     update=(apt)
 fi
@@ -51,21 +51,13 @@ for mission in ${update[@]}; do
             yes yes | ibrewup
             ibrew cleanup
             ;;
-        aconda)
-            echo " Updating anaconda ... "
+        aconda | mconda | ai)
+            echo " Updating $mission ... "
             echo
 
-            source ~/Init/aconda
+            source ~/Init/$mission
             yes yes | condaup
             yes yes | acondaup
-            conda clean --all --yes
-            ;;
-        mconda)
-            echo " Updating miniconda ... "
-            echo
-
-            source ~/Init/mconda
-            yes yes | condaup
             conda clean --all --yes
             ;;
         apt)
