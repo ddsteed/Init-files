@@ -39,11 +39,11 @@ esac
 condabin=`dirname $CONDA_EXE`
 
 condaup () {
-  conda update --all
+    conda update --all -y
 }
 
 acondaup () {
-  conda update anaconda --all
+  conda update anaconda --all -y
 }
 
 cdea () {

@@ -9,16 +9,27 @@
 # Copyright (c) 2022, RDS
 #-----------------------------------------------------------------------
 
-if [[ `uname` == "Darwin" ]]; then
-    update=(mac abrew ibrew aconda mconda ai)
-elif [[ `uname` == "Linux" ]]; then
-    update=(apt)
+if [[ $2 == "" ]]; then
+    if [[ `uname` == "Darwin" ]]; then
+        update=(mac abrew ibrew aconda mconda ai)
+    elif [[ `uname` == "Linux" ]]; then
+        update=(apt)
+    fi
+else
+    update=($2)
 fi
 
 echoline () {
     echo "--------------------------------------------------"
 }
     
+function printc_d {
+    bg=44
+    fg=37
+    txt=$1
+    echo -e "\033[${bg};${fg}m${txt}\033[0m"
+}
+
 num=0
 total=${#update[@]}
 
@@ -26,46 +37,50 @@ for mission in ${update[@]}; do
     let num++
     echo
     echoline
-    echo "[$num/$total]: "
+    printc_d "[$num/$total]: "
 
     case $mission in
         mac)
-            echo " Updating Mac OS system & softwares ... "
+            printc_d " Updating Mac OS system & softwares ... "
             echo
             
             softwareupdate --all --install --force
             ;;
         abrew)
-            echo " Updating Homebrew (arm) applications ... "
+            printc_d " Updating Homebrew (arm) applications ... "
             echo
 
             source  ~/Init/arm
-            yes yes | abrewup
+            abrewup
             abrew cleanup
             ;;
         ibrew)
-            echo " Updating Homebrew (x86_64) applications ... "
+            printc_d " Updating Homebrew (x86_64) applications ... "
             echo
 
             source ~/Init/x86
-            yes yes | ibrewup
+            ibrewup
             ibrew cleanup
             ;;
         aconda | mconda | ai)
-            echo " Updating $mission ... "
+            printc_d " Updating $mission ... "
             echo
 
             source ~/Init/$mission
-            yes yes | condaup
-            yes yes | acondaup
+            condaup
+            if [[ $mission == aconda ]]; then acondaup; fi
             conda clean --all --yes
             ;;
         apt)
-            echo " Updating Ubuntu Linux apt softwares ... "
+            printc_d " Updating Ubuntu Linux apt softwares ... "
             echo
 
             sudo apt-get update -y && sudo apt-get upgrade -y
-            sudo apt-get autoremove
+            sudo apt-get autoremove -y
+            ;;
+        *)
+            printc_d " $mission is NOT in the update lists ..."
+            echo
             ;;
     esac
 done

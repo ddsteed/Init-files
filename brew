@@ -38,7 +38,7 @@ abi () {
 }
 
 abrewup () {
-    abrew update && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
+    abrew update -y && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
 }
 
 abrewin () {
@@ -59,7 +59,7 @@ ibi () {
 }
 
 ibrewup () {
-    ibrew update && ibrew upgrade && ibrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
+    ibrew update -y && ibrew upgrade && ibrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
 }
 
 brewin () {
