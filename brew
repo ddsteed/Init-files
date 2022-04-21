@@ -33,12 +33,20 @@ case $runname in
         ;;
 esac
 
+brewup () {
+    brew update && brew upgrade && brew cu -a -f -y && mas upgrade
+}
+
+brewclean () {
+    brew ls --$1 | xargs brew remove -f --ignore-dependencies
+}
+
 abi () {
     abrew install $1
 }
 
 abrewup () {
-    abrew update -y && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
+    abrew update && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
 }
 
 abrewin () {
@@ -59,7 +67,7 @@ ibi () {
 }
 
 ibrewup () {
-    ibrew update -y && ibrew upgrade && ibrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
+    ibrew update && ibrew upgrade && ibrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
 }
 
 brewin () {

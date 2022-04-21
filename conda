@@ -1,4 +1,23 @@
 #!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# This script is to iniatize conda environment
+#
+# Author: Hao Feng (F1)
+# Date:   Apr. 21, 2022
+#
+# Copyright (c) 2022, RDS
+#
+#
+# For Apple M1 Silicon CPU:
+#   - arm:
+#       mforge:  miniforge
+#       mbforge: mambaforge
+#       ai:      AI envs
+#       mconda:  miniconda3
+#   - x86_64:
+#       aconda:  anaconda3
+#       rconda:  ROS envs
+#-----------------------------------------------------------------------
 
 runname=`basename $0`
 
@@ -16,24 +35,30 @@ init_conda () {
 }
 
 case $runname in
-  ai | aiconda)
-      init_conda /opt/AI/envs
-      ;;
-  rconda)
-      init_conda /opt/ros/envs
-      ;;
-  mconda)
-      init_conda /opt/miniconda3
-      export PATH=/opt/miniconda3/bin:$PATH
-      ;;
-  aconda)
-      init_conda /opt/anaconda3
-      export PATH=/opt/anaconda3/bin:$PATH
-      ;;
-  conda)
-      init_conda /opt/anaconda3
-      export PATH=/opt/anaconda3/bin:$PATH
-      ;;
+    mforge)
+        init_conda /opt/miniforge3
+        ;;
+    mbforge)
+        init_conda /opt/mambaforge
+        ;;
+    ai | aiconda)
+        init_conda /opt/AI/envs
+        ;;
+    rconda)
+        init_conda /opt/ros/conda_venv
+        ;;
+    mconda)
+        init_conda /opt/miniconda3
+        export PATH=/opt/miniconda3/bin:$PATH
+        ;;
+    aconda)
+        init_conda /opt/anaconda3
+        export PATH=/opt/anaconda3/bin:$PATH
+        ;;
+    conda)
+        init_conda /opt/anaconda3
+        export PATH=/opt/anaconda3/bin:$PATH
+        ;;
 esac
 
 condabin=`dirname $CONDA_EXE`

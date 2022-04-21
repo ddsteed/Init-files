@@ -9,9 +9,14 @@
 # Copyright (c) 2022, RDS
 #-----------------------------------------------------------------------
 
+# since 'update' is called usually through 'ini update', passed parameter
+# is listed as 2nd order.
+# If you call 'update' directly, $2 should be changed as $1.
+# (I have no time to fix the parameters order.)
+
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-        update=(mac abrew ibrew aconda mconda ai)
+        update=(mac abrew ibrew ai mforge mbforge mconda aconda)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi
@@ -62,7 +67,7 @@ for mission in ${update[@]}; do
             ibrewup
             ibrew cleanup
             ;;
-        aconda | mconda | ai)
+        mbforge | mforge | aconda | mconda | ai)
             printc_d " Updating $mission ... "
             echo
 
