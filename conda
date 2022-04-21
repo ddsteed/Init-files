@@ -21,6 +21,10 @@
 
 runname=`basename $0`
 
+conda_home=/opt/conda
+ai_home=/opt/AI/envs
+ros_home=/opt/ros/conda_venv
+
 init_conda () {
     env=$1
     if [[ -f $env/etc/profile.d/conda.sh ]]; then
@@ -36,28 +40,28 @@ init_conda () {
 
 case $runname in
     mforge)
-        init_conda /opt/miniforge3
+        init_conda ${conda_home}/miniforge3
         ;;
     mbforge)
-        init_conda /opt/mambaforge
+        init_conda ${conda_home}/mambaforge
         ;;
     ai | aiconda)
-        init_conda /opt/AI/envs
+        init_conda ${ai_home}
         ;;
     rconda)
-        init_conda /opt/ros/conda_venv
+        init_conda ${ros_home}
         ;;
     mconda)
-        init_conda /opt/miniconda3
-        export PATH=/opt/miniconda3/bin:$PATH
+        init_conda ${conda_home}/miniconda3
+        export PATH=${conda_home}/miniconda3/bin:$PATH
         ;;
     aconda)
-        init_conda /opt/anaconda3
-        export PATH=/opt/anaconda3/bin:$PATH
+        init_conda ${conda_home}/anaconda3
+        export PATH=${conda_home}/anaconda3/bin:$PATH
         ;;
     conda)
-        init_conda /opt/anaconda3
-        export PATH=/opt/anaconda3/bin:$PATH
+        init_conda ${conda_home}/anaconda3
+        export PATH=${conda_home}/anaconda3/bin:$PATH
         ;;
 esac
 
@@ -65,6 +69,7 @@ condabin=`dirname $CONDA_EXE`
 
 condaup () {
     conda update --all -y
+    # pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U 
 }
 
 acondaup () {
@@ -99,3 +104,23 @@ pynv () {
   Open /Applications/Anaconda-Navigator.app
 }
 
+create_ai_env () {
+    
+    if [[ ! -f ${ai_home} ]]; then
+        init_conda ${conda_home}/mambaforge
+        conda create -y --prefix ${ai_home} mamba
+    fi
+
+    init_conda ${ai_home}
+
+    app=(ipykernel
+         pandas
+         tensorflow
+         seaborn
+         statsmodels)
+
+    mamba install -y -c conda-forge ${app[@]}
+
+    pip_app=(scikit-learn)
+    pip install --upgrade --force-reinstall ${pip_app[@]}
+}
