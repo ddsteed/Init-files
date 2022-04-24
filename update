@@ -35,14 +35,33 @@ function printc_d {
     echo -e "\033[${bg};${fg}m${txt}\033[0m"
 }
 
+function print_welcome () {
+    printc_d "-----------------------------------------------------"
+    printc_d " This script is to update all Mac/Linux Softwares    "
+    printc_d "                                                     "
+    printc_d " Author: Hao Feng (F1)                               "
+    printc_d "                                                     "
+    printc_d " Copyright (c) 2022, RDS                             "
+    printc_d "                                                     "
+    printc_d "-----------------------------------------------------"
+    echo
+    echo     "  The following packages will be updated ...      "
+    echo
+    echo     "   ${update[@]} "
+    echo    
+    printc_d "-----------------------------------------------------"
+}
+
+print_welcome
+
 num=0
 total=${#update[@]}
 
 for mission in ${update[@]}; do
     let num++
     echo
-    echoline
-    printc_d "[$num/$total]: "
+    # echoline
+    printc_d "[$num/$total]: $mission  "
 
     case $mission in
         mac)
@@ -52,26 +71,31 @@ for mission in ${update[@]}; do
             softwareupdate --all --install --force
             ;;
         abrew)
+            source  ~/Init/arm
             printc_d " Updating Homebrew (arm) applications ... "
             echo
+            echo     "     HOMEBREW: $HOMEBREW_REPOSITORY"
+            echo
 
-            source  ~/Init/arm
             abrewup
             abrew cleanup
             ;;
         ibrew)
+            source ~/Init/x86
             printc_d " Updating Homebrew (x86_64) applications ... "
             echo
+            echo     "     HOMEBREW: $HOMEBREW_REPOSITORY"
+            echo
 
-            source ~/Init/x86
             ibrewup
             ibrew cleanup
             ;;
         mbforge | mforge | aconda | mconda | ai)
-            printc_d " Updating $mission ... "
+            source ~/Init/$mission
+
+            printc_d " Updating $condaenv ... "
             echo
 
-            source ~/Init/$mission
             condaup
             if [[ $mission == aconda ]]; then acondaup; fi
             conda clean --all --yes

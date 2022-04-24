@@ -40,30 +40,31 @@ init_conda () {
 
 case $runname in
     mforge)
-        init_conda ${conda_home}/miniforge3
+        export condaenv=${conda_home}/miniforge3
         ;;
     mbforge)
-        init_conda ${conda_home}/mambaforge
+        export condaenv=${conda_home}/mambaforge
         ;;
     ai | aiconda)
-        init_conda ${ai_home}
+        export condaenv=${ai_home}
         ;;
     rconda)
-        init_conda ${ros_home}
+        export condaenv=${ros_home}
         ;;
     mconda)
-        init_conda ${conda_home}/miniconda3
+        export condaenv=${conda_home}/miniconda3
         export PATH=${conda_home}/miniconda3/bin:$PATH
         ;;
     aconda)
-        init_conda ${conda_home}/anaconda3
+        export condaenv=${conda_home}/anaconda3
         export PATH=${conda_home}/anaconda3/bin:$PATH
         ;;
     conda)
-        init_conda ${conda_home}/anaconda3
+        export condaenv=${conda_home}/anaconda3
         export PATH=${conda_home}/anaconda3/bin:$PATH
         ;;
 esac
+init_conda $condaenv
 
 condabin=`dirname $CONDA_EXE`
 
