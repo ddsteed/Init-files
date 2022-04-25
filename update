@@ -70,25 +70,15 @@ for mission in ${update[@]}; do
             
             softwareupdate --all --install --force
             ;;
-        abrew)
-            source  ~/Init/arm
-            printc_d " Updating Homebrew (arm) applications ... "
+        abrew | ibrew)
+            source  ~/Init/$mission
+            printc_d " Updating Homebrew ($mission) applications ... "
             echo
-            echo     "     HOMEBREW: $HOMEBREW_REPOSITORY"
-            echo
-
-            abrewup
-            abrew cleanup
-            ;;
-        ibrew)
-            source ~/Init/x86
-            printc_d " Updating Homebrew (x86_64) applications ... "
-            echo
-            echo     "     HOMEBREW: $HOMEBREW_REPOSITORY"
+            echo     "   *  BREW HOME: $HOMEBREW_REPOSITORY"
             echo
 
-            ibrewup
-            ibrew cleanup
+            brewup
+            brew cleanup
             ;;
         mbforge | mforge | aconda | mconda | ai)
             source ~/Init/$mission

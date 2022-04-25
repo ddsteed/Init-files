@@ -3,43 +3,21 @@
 runname=`basename $0`
 
 case $runname in
-    brew | arm)
+    brew | abrew)
+        eval $(/opt/Homebrew/bin/brew shellenv) #ckbrew
+
         abrew () {
             arch -arm64e /opt/homebrew/bin/brew $@
         } 
-        
-        export HOMEBREW_PREFIX="/opt/homebrew";
-        export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
-        export HOMEBREW_REPOSITORY="/opt/homebrew";
-        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-        export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-        export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
-        
-        eval $(/opt/Homebrew/bin/brew shellenv) #ckbrew
         ;;
-    x86)
+    ibrew)
+        eval $(/usr/local/Homebrew/bin/brew shellenv) #ckbrew
+
         ibrew () {
             arch -x86_64 /usr/local/bin/brew $@
         }
-        
-        export HOMEBREW_PREFIX="/usr/local/homebrew";
-        export HOMEBREW_CELLAR="/usr/local/homebrew/Cellar";
-        export HOMEBREW_REPOSITORY="/usr/local/homebrew";
-        export PATH="/usr/local/homebrew/bin:/usr/local/homebrew/sbin${PATH+:$PATH}";
-        export MANPATH="/usr/local/homebrew/share/man${MANPATH+:$MANPATH}:";
-        export INFOPATH="/usr/local/homebrew/share/info:${INFOPATH:-}";
-        
-        eval $(/usr/local/Homebrew/bin/brew shellenv) #ckbrew
         ;;
 esac
-
-brewup () {
-    brew update && brew upgrade && brew cu -a -f -y && mas upgrade
-}
-
-brewclean () {
-    brew ls --$1 | xargs brew remove -f --ignore-dependencies
-}
 
 abi () {
     abrew install $1
@@ -56,7 +34,6 @@ abrewin () {
 abrewun () {
   arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
 }
-
 
 abrewclean () {
   abrew ls --$1 | xargs brew remove -f --ignore-dependencies
@@ -80,6 +57,21 @@ ibrewun () {
 
 ibrewclean () {
   ibrew ls --$1 | xargs brew remove -f --ignore-dependencies
+}
+
+brewup () {
+    case $runname in
+        brew | abrew)
+            abrewup
+            ;;
+        ibrew)
+            ibrewup
+            ;;
+    esac
+}
+
+brewclean () {
+    brew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
 #-------------------------------------------
