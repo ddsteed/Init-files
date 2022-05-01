@@ -1,0 +1,29 @@
+#!/usr/bin/env  zsh
+#
+
+runname=`basename $0`
+
+case $runname in
+    mactex)
+      ;;
+    *)
+      ;;
+esac
+
+tex_chinese_set () {
+    sudo tlmgr install environ
+    sudo tlmgr install trimspaces
+    sudo tlmgr install zhnumber
+    sudo tlmgr install ctex
+    sudo tlmgr install needspace
+    sudo tlmgr install xecjk
+}
+
+tex_update () {
+    sudo tlmgr update --self
+    sudo tlmgr update --all
+}
+
+tex_fmt () {
+    sudo fmtutil-sys --all
+}

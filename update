@@ -16,7 +16,7 @@
 
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-        update=(mac abrew ibrew ai mforge mbforge mconda aconda)
+        update=(mac abrew ibrew ai mforge mbforge mconda aconda mactex)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi
@@ -96,6 +96,13 @@ for mission in ${update[@]}; do
 
             sudo apt-get update -y && sudo apt-get upgrade -y
             sudo apt-get autoremove -y
+            ;;
+        mactex)
+            source  ~/Init/$mission
+            printc_d " Updating MacTex ... "
+            echo
+
+            tex_update
             ;;
         *)
             printc_d " $mission is NOT in the update lists ..."
