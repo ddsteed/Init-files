@@ -8,23 +8,29 @@ abrew () {
 
 case $runname in
     mysql)
-        mysql.server start
-
         sql () {
-            abrew services $1 mysql
+          abrew services $1 mysql
         }
 
-        sqls () {
-            mysql.server $1
+        sqlstart () {
+          sql start
         }
 
-        sqlr () {
-            mysql -u root -p
+        sqlstop () {
+          sql stop
         }
+
+        sqlstart
         ;;
     redis)
         redis () {
-            abrew services $1 redis
+          abrew services $1 redis
         }
+
+        redisstart () {
+          redis start
+        }
+
+        redisstart
         ;;
 esac

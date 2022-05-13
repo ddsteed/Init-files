@@ -143,7 +143,7 @@ gpush () {
 }
 
 gpull () {
-    git pull github develop 
+    git pull github develop
 }
 
 gfat () {
