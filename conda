@@ -74,54 +74,51 @@ condaup () {
 }
 
 acondaup () {
-  conda update anaconda --all -y
+    conda update anaconda --all -y
 }
 
 cdea () {
-  conda deactivate
+    conda deactivate
 }
 
 cact () {
-  conda activate
+    conda activate $1
 }
 
 cinfo () {
-  conda info
+    conda info
 }
 
 cel () {
-  conda env list
+    conda env list
 }
 
 jnb () {
-  $condabin/jupyter-notebook
+    $condabin/jupyter-notebook
 }
 
 jlab () {
-  $condabin/jupyter-lab
+    $condabin/jupyter-lab
 }
 
 pynv () {
-  Open /Applications/Anaconda-Navigator.app
+    Open /Applications/Anaconda-Navigator.app
 }
 
-create_ai_env () {
-    
-    if [[ ! -f ${ai_home} ]]; then
+create_conda () {
+    name=$1
+
+    if [[ ! -f $name ]]; then
         init_conda ${conda_home}/mambaforge
-        conda create -y --prefix ${ai_home} mamba
+        conda create -y -p $name 
     fi
 
-    init_conda ${ai_home}
+    conda activate $name
+    conda install -y mamba -c conda-forge
+    conda config --env --add channels conda-forge
+}
 
-    app=(ipykernel
-         pandas
-         tensorflow
-         seaborn
-         statsmodels)
-
-    mamba install -y -c conda-forge ${app[@]}
-
-    pip_app=(scikit-learn)
-    pip install --upgrade --force-reinstall ${pip_app[@]}
+install_conda_basic () {
+    basic=(jupyter matplotlib numpy pandas scipy seaborn)
+    mamba install -y -c conda-forge ${basic[@]}
 }
