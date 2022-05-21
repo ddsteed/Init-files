@@ -25,6 +25,19 @@ conda_home=/opt/conda
 ai_home=/opt/AI/envs
 ros_home=/opt/ros/conda_venv
 
+create_conda () {                                        
+    name=$1                                              
+                                                         
+    if [[ ! -f $name ]]; then                            
+        init_conda ${conda_home}/mambaforge              
+        conda create -y -p $name                         
+    fi                                                   
+                                                         
+    conda activate $name                                 
+    conda install -y mamba -c conda-forge                
+    conda config --env --add channels conda-forge        
+}                                                        
+                                                         
 init_conda () {
     env=$1
     if [[ -f $env/etc/profile.d/conda.sh ]]; then
@@ -35,6 +48,7 @@ init_conda () {
         echo "$env does NOT exist, create it firstly."
         echo "----------------------------------------------------"
         echo
+        create_conda $env
     fi
 }
 
@@ -105,20 +119,7 @@ pynv () {
     Open /Applications/Anaconda-Navigator.app
 }
 
-create_conda () {
-    name=$1
-
-    if [[ ! -f $name ]]; then
-        init_conda ${conda_home}/mambaforge
-        conda create -y -p $name 
-    fi
-
-    conda activate $name
-    conda install -y mamba -c conda-forge
-    conda config --env --add channels conda-forge
-}
-
-install_conda_basic () {
+install_conda_basic () {                                 
     basic=(jupyter matplotlib numpy pandas scipy seaborn)
-    mamba install -y -c conda-forge ${basic[@]}
-}
+    mamba install -y -c conda-forge ${basic[@]}          
+}                                                        
