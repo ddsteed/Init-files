@@ -86,9 +86,21 @@ init_conda $condaenv
 
 condabin=`dirname $CONDA_EXE`
 
+condauc () {
+    if command -v mamba &> /dev/null
+    then
+        mamba $1 --all -y
+    else
+        conda $1 --all -y
+    fi
+}
+
 condaup () {
-    conda update --all -y
-    # pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U 
+    condauc update
+}
+
+condaclean () {
+    condauc clean
 }
 
 acondaup () {

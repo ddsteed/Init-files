@@ -89,7 +89,7 @@ for mission in ${update[@]}; do
 
             condaup
             if [[ $mission == aconda ]]; then acondaup; fi
-            conda clean --all --yes
+            condaclean
             ;;
         apt)
             printc_d " Updating Ubuntu Linux apt softwares ... "
