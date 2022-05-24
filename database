@@ -12,25 +12,37 @@ case $runname in
           abrew services $1 mysql
         }
 
-        sqlstart () {
+        sqls () {
           sql start
+        }
+
+        sqlr () {
+          sql restart
         }
 
         sqlstop () {
           sql stop
         }
 
-        sqlstart
+        sqls
         ;;
     redis)
         redis () {
           abrew services $1 redis
         }
 
-        redisstart () {
+        rediss () {
           redis start
         }
 
-        redisstart
+        redisr () {
+          redis restart
+        }
+
+        redisstop () {
+          redis stop
+        }
+
+        rediss
         ;;
 esac

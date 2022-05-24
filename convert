@@ -10,6 +10,13 @@ case $runname in
         m2d () {
             pandoc $1.md -o $1.docx
         }
+        m2p () {
+          pandoc --pdf-engine=xelatex \
+            --toc -N \
+            -V colorlinks -V urlcolor=NavyBlue \
+            --highlight-style zenburn \
+            $1.md -o $1.pdf
+        }
         ;;
     w2m)
         eval "$(rbenv init -)"

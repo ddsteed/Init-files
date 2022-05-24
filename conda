@@ -14,6 +14,7 @@
 #       mbforge: mambaforge
 #       ai:      AI envs
 #       mconda:  miniconda3
+#       dcmenv:  dcm conda environment
 #   - x86_64:
 #       aconda:  anaconda3
 #       rconda:  ROS envs
@@ -29,7 +30,7 @@ create_conda () {
     name=$1                                              
                                                          
     if [[ ! -f $name ]]; then                            
-        init_conda ${conda_home}/mambaforge              
+        init_conda ${conda_home}/miniforge3
         conda create -y -p $name                         
     fi                                                   
                                                          
@@ -53,6 +54,9 @@ init_conda () {
 }
 
 case $runname in
+    dcmenv)
+        export condaenv=~/Research/FORECAST/DCM/envs
+        ;;
     mforge)
         export condaenv=${conda_home}/miniforge3
         ;;

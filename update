@@ -16,7 +16,8 @@
 
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-        update=(mac abrew ibrew ai mforge mbforge mconda aconda)
+        # update=(mac abrew ibrew ai mforge mbforge mconda aconda)
+        update=(mac abrew ibrew ai aconda mforge)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi
