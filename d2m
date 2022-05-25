@@ -1,1 +1,79 @@
-convert
+#!/usr/bin/env zsh
+#
+runname=`basename $0`
+
+case $runname in
+    ebook)
+        # docx to md
+        d2m () {
+            pandoc -f docx -t markdown --extract-media=$1  $1.docx -o $1.md
+        }
+
+        # md to docx
+        m2d () {
+            pandoc $1.md -o $1.docx
+        }
+
+        # md to pdf
+        m2p () {
+            pandoc --pdf-engine=xelatex \
+                   --toc -N \
+                   -V colorlinks -V urlcolor=NavyBlue \
+                   --highlight-style zenburn \
+                   $1.md -o $1.pdf
+        }
+
+        # md to epub
+        m2e () {
+            pandoc -s --toc $1.md -o $1.epub
+        }
+
+        ;;
+    w2m)
+        eval "$(rbenv init -)"
+        
+        export PATH="/opt/homebrew/lib/ruby/gems/3.0.0/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+        export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+        export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+        export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
+        ;;
+    ocr)
+        source ~/Init/abrew
+        ;;
+    *)
+        ;;
+esac
+
+pdfocr () {
+    name=$1
+    
+    # Split and convert the PDF with ImageMagick convert
+    convert -density 300 $name.pdf -type Grayscale -compress lzw -background white +matte -depth 32 page_%05d.tif
+
+    # OCR the pages with Tesseract
+    for i in page_*.tif; do echo $i; tesseract $i $(basename $i .tif) pdf; done
+
+    # Join your individual PDF files into a single, searchable PDF with pdftk
+    pdftk page_*.pdf cat output ${name}_merged.pdf
+}
+
+ocrpdf () {
+    while test "x$1" != "x"; do
+	    case $1 in
+	        -l) shift; lang=$1      ;;
+	        -i) shift; inpu=$1      ;;
+	        -o) shift; oupt=$1      ;;
+	        -f) shift; ofmt=$1      ;;
+	        *)                      ;;
+	    esac
+	    shift
+    done
+
+    if [[ $lang == ""   ]]; then lang=eng+chi_sim;  fi
+    if [[ $inpu == ""   ]]; then inpu=input;        fi
+    if [[ $oupt == ""   ]]; then oupt=${inpu}_o;    fi
+    if [[ $ofmt == ""   ]]; then ofmt=pdf;          fi
+
+    ocrmypdf -l $lang --output-type $ofmt $inpu.pdf $oupt.pdf
+}
+
