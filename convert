@@ -3,6 +3,37 @@
 runname=`basename $0`
 
 case $runname in
+    ebook)
+        # docx to md
+        d2m () {
+            pandoc -f docx -t markdown --extract-media=$1 -o $1.md $1.docx
+        }
+
+        # md to docx
+        m2d () {
+            pandoc $1.md -o $1.docx
+        }
+
+        # md to pdf
+        m2p () {
+            pandoc --pdf-engine=xelatex \
+                   --toc -N \
+                   -V colorlinks -V urlcolor=NavyBlue \
+                   --highlight-style zenburn \
+                   $1.md -o $1.pdf
+        }
+
+        # md to epub
+        m2e () {
+            pandoc -s --toc $1.md -o $1.epub
+        }
+
+        # png to pdf
+        p2p () {
+            sips -s format pdf $1.png --out $1.pdf
+        }
+        
+        ;;
     w2m)
         eval "$(rbenv init -)"
         
@@ -51,26 +82,7 @@ ocrpdf () {
     ocrmypdf -l $lang --output-type $ofmt $inpu.pdf $oupt.pdf
 }
 
-# docx to md
-d2m () {
-    pandoc -f docx -t markdown --extract-media=$1 -o $1.md $1.docx
-}
-
-# md to docx
-m2d () {
-    pandoc $1.md -o $1.docx
-}
-
-# md to pdf
-m2p () {
-    pandoc --pdf-engine=xelatex \
-           --toc -N \
-           -V colorlinks -V urlcolor=NavyBlue \
-           --highlight-style zenburn \
-           $1.md -o $1.pdf
-}
-
-# md to epub
-m2e () {
-    pandoc -s --toc $1.md -o $1.epub
+ocrpng () {
+    sips -s format pdf $1.png --out $1.pdf
+    ocrpdf -i $1
 }
