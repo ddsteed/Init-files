@@ -25,7 +25,7 @@ case $runname in
 
         # md to epub
         m2e () {
-            pandoc -s --toc $1.md -o $1.epub
+            pandoc -s --toc --toc-depth=2 $1.md -o $1.epub
         }
 
         # png to pdf
@@ -63,6 +63,8 @@ pdfocr () {
 }
 
 ocrpdf () {
+    source ~/Init/abrew
+    
     while test "x$1" != "x"; do
 	    case $1 in
 	        -l) shift; lang=$1      ;;
@@ -85,4 +87,19 @@ ocrpdf () {
 ocrpng () {
     sips -s format pdf $1.png --out $1.pdf
     ocrpdf -i $1
+}
+
+ocr () {
+    name=(`gets $1`)
+    prefix=${name[1]}
+    suffix=${name[2]}
+
+    case $suffix in
+        pdf)
+            ocrpdf $prefix
+            ;;
+        png)
+            ocrpng $prefix
+            ;;
+    esac
 }
