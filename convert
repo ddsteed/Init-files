@@ -90,7 +90,7 @@ ocrpng () {
 }
 
 ocr () {
-    name=(`gets $1`)
+    name=(`get_suffix $1`)
     prefix=${name[1]}
     suffix=${name[2]}
 

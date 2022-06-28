@@ -21,16 +21,23 @@
 #-----------------------------------------------------------------------
 
 runname=`basename $0`
+os=`uname`
 
 conda_home=/opt/conda
 ai_home=/opt/AI/envs
 ros_home=/opt/ros/conda_venv
 
+if [[ $os == Darwin ]]; then
+  condabase=${conda_home}/miniforge3
+elif [[ $os == Linux ]]; then
+  condabase=${conda_home}/miniconda3
+fi
+
 create_conda () {                                        
     name=$1                                              
                                                          
     if [[ ! -f $name ]]; then                            
-        init_conda ${conda_home}/miniforge3
+        init_conda $condabase
         conda create -y -p $name                         
     fi                                                   
                                                          
@@ -55,7 +62,7 @@ init_conda () {
 
 case $runname in
     dcmenv)
-        export condaenv=~/Research/FORECAST/DCM/envs
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
         ;;
     mforge)
         export condaenv=${conda_home}/miniforge3
