@@ -14,7 +14,9 @@
 #       mbforge: mambaforge
 #       ai:      AI envs
 #       mconda:  miniconda3
-#       dcmenv:  dcm conda environment
+#       xconda:  miniconda3 + x86_64
+#       dcmenv:  dcm conda environment with arm64
+#       dcmenvx: dcm conda environment with x86_64
 #   - x86_64:
 #       aconda:  anaconda3
 #       rconda:  ROS envs
@@ -63,6 +65,11 @@ init_conda () {
 case $runname in
     dcmenv)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
+        export PATH=${condaenv}/bin:$PATH
+        ;;
+    dcmenvx)
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-x
+        export PATH=${condaenv}/bin:$PATH
         ;;
     mforge)
         export condaenv=${conda_home}/miniforge3
@@ -79,6 +86,14 @@ case $runname in
     mconda)
         export condaenv=${conda_home}/miniconda3
         export PATH=${conda_home}/miniconda3/bin:$PATH
+        ;;
+    mcondax)
+        export condaenv=${conda_home}/miniconda3-intel
+        export PATH=${conda_home}/miniconda3-intel/bin:$PATH
+        ;;
+    xconda)
+        export condaenv=${conda_home}/miniconda3-intel
+        export PATH=${conda_home}/miniconda3-intel/bin:$PATH
         ;;
     aconda)
         export condaenv=${conda_home}/anaconda3

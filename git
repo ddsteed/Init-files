@@ -146,6 +146,11 @@ gpush () {
     git push github --follow-tags
 }
 
+fatpush () {
+    echo "push fat$1 ..."
+    git push fat$1 develop --force --follow-tags
+}
+
 gpull () {
     git pull github develop
 }

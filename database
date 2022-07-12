@@ -46,3 +46,6 @@ case $runname in
         rediss
         ;;
 esac
+
+alias sqlroot='mysql -u root'
+alias sqltest='mysql -u test -p'
