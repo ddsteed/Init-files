@@ -10,10 +10,10 @@ case $runname in
             arch -arm64e /opt/homebrew/bin/brew $@
         } 
         ;;
-    ibrew)
+    xbrew)
         eval $(/usr/local/Homebrew/bin/brew shellenv) #ckbrew
 
-        ibrew () {
+        xbrew () {
             arch -x86_64 /usr/local/bin/brew $@
         }
         ;;
@@ -39,24 +39,24 @@ abrewclean () {
   abrew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
-ibi () {
-    ibrew install $1
+xbi () {
+    xbrew install $1
 }
 
-ibrewup () {
-    ibrew update && ibrew upgrade && ibrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
+xbrewup () {
+    xbrew update && xbrew upgrade && xbrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
 }
 
 brewin () {
   arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 }
 
-ibrewun () {
+xbrewun () {
   arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
 }
 
-ibrewclean () {
-  ibrew ls --$1 | xargs brew remove -f --ignore-dependencies
+xbrewclean () {
+  xbrew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
 brewup () {
@@ -64,8 +64,8 @@ brewup () {
         brew | abrew)
             abrewup
             ;;
-        ibrew)
-            ibrewup
+        xbrew)
+            xbrewup
             ;;
     esac
 }

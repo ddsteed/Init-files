@@ -64,8 +64,8 @@ fgit () {
             echo 
             echo "----------------------------------------------------"
             echo " [$mission/$total]: "
-            echo "         $run from/to repository:$re/$br ... "
-            echo "         ****                    *************** "
+            echo "         $run repository: $re/$br ... "
+            echo "         ****             *************** "
             echo
             git $run $re $br $force --tags
         done

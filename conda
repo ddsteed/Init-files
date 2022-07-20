@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 #-----------------------------------------------------------------------
-# This script is to iniatize conda environment
+# This script is to iniatize python environment
 #
 # Author: Hao Feng (F1)
 # Date:   Apr. 21, 2022
@@ -10,27 +10,28 @@
 #
 # For Apple M1 Silicon CPU:
 #   - arm:
-#       mforge:  miniforge
-#       mbforge: mambaforge
-#       ai:      AI envs
-#       mconda:  miniconda3
-#       xconda:  miniconda3 + x86_64
-#       dcmenv:  dcm conda environment with arm64
-#       dcmenvx: dcm conda environment with x86_64
+#       mforge:   miniforge
+#       mbforge:  mambaforge
+#       ai:       AI envs
+#       mconda:   miniconda3
+#       xconda:   miniconda3 + x86_64
+#       dcmenv:   dcm conda environment with arm64
+#       dcmenvl:  dcm python virtual environment (venv) with multipass-Linux 
+#       dcmenvx:  dcm conda environment with x86_64
 #   - x86_64:
-#       aconda:  anaconda3
-#       rconda:  ROS envs
+#       aconda:   anaconda3
+#       rconda:   ROS envs
 #-----------------------------------------------------------------------
 
 runname=`basename $0`
 os=`uname`
 
 conda_home=/opt/conda
-ai_home=/opt/AI/envs
+ai_home=/opt/AI
 ros_home=/opt/ros/conda_venv
 
 if [[ $os == Darwin ]]; then
-  condabase=${conda_home}/miniforge3
+  condabase=${conda_home}/mambaforge
 elif [[ $os == Linux ]]; then
   condabase=${conda_home}/miniconda3
 fi
@@ -53,6 +54,8 @@ init_conda () {
     if [[ -f $env/etc/profile.d/conda.sh ]]; then
         source $env/etc/profile.d/conda.sh
         conda activate $env
+    elif [[ -f $env/bin/activate ]]; then
+        source $env/bin/activate
     else
         echo
         echo "$env does NOT exist, create it firstly."
@@ -67,33 +70,37 @@ case $runname in
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
         export PATH=${condaenv}/bin:$PATH
         ;;
+    dcmenvl)
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-l
+        export PATH=${condaenv}/bin:$PATH
+        ;;
     dcmenvx)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-x
         export PATH=${condaenv}/bin:$PATH
         ;;
     mforge)
         export condaenv=${conda_home}/miniforge3
+        export PATH=${condaenv}/bin:$PATH
         ;;
     mbforge)
         export condaenv=${conda_home}/mambaforge
+        export PATH=${condaenv}/bin:$PATH
         ;;
     ai | aiconda)
         export condaenv=${ai_home}
+        export PATH=${condaenv}/bin:$PATH
         ;;
     rconda)
         export condaenv=${ros_home}
+        export PATH=${condaenv}/bin:$PATH
         ;;
     mconda)
         export condaenv=${conda_home}/miniconda3
-        export PATH=${conda_home}/miniconda3/bin:$PATH
+        export PATH=${condaenv}/bin:$PATH
         ;;
     mcondax)
         export condaenv=${conda_home}/miniconda3-intel
-        export PATH=${conda_home}/miniconda3-intel/bin:$PATH
-        ;;
-    xconda)
-        export condaenv=${conda_home}/miniconda3-intel
-        export PATH=${conda_home}/miniconda3-intel/bin:$PATH
+        export PATH=${condaenv}/bin:$PATH
         ;;
     aconda)
         export condaenv=${conda_home}/anaconda3
