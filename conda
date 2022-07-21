@@ -1,56 +1,48 @@
 #!/usr/bin/env zsh
 #-----------------------------------------------------------------------
 # This script is to iniatize python environment
-#
+#---
 # Author: Hao Feng (F1)
 # Date:   Apr. 21, 2022
 #
 # Copyright (c) 2022, RDS
 #
-#
+#---
 # For Apple M1 Silicon CPU:
 #   - arm:
-#       mforge:   miniforge
 #       mbforge:  mambaforge
 #       ai:       AI envs
 #       mconda:   miniconda3
-#       xconda:   miniconda3 + x86_64
 #       dcmenv:   dcm conda environment with arm64
-#       dcmenvl:  dcm python virtual environment (venv) with multipass-Linux 
-#       dcmenvx:  dcm conda environment with x86_64
 #   - x86_64:
-#       aconda:   anaconda3
+#       dcmenvx:  dcm conda environment with x86_64
 #       rconda:   ROS envs
+#       xconda:   miniconda3 + x86_64
+# For multipass Ubuntu Linux
+#   - arm:
+#       dcmenvl:  dcm python virtual environment (venv) with multipass-Linux 
+#       mcondal:  miniconda3 + Linux
 #-----------------------------------------------------------------------
-
-runname=`basename $0`
-os=`uname`
-
-conda_home=/opt/conda
-ai_home=/opt/AI
-ros_home=/opt/ros/conda_venv
-
-if [[ $os == Darwin ]]; then
-  condabase=${conda_home}/mambaforge
-elif [[ $os == Linux ]]; then
-  condabase=${conda_home}/miniconda3
-fi
-
 create_conda () {                                        
     name=$1                                              
                                                          
     if [[ ! -f $name ]]; then                            
         init_conda $condabase
-        conda create -y -p $name                         
+        conda create -y -p $name python=3.9                        
     fi                                                   
                                                          
     conda activate $name                                 
-    conda install -y mamba -c conda-forge                
     conda config --env --add channels conda-forge        
+
+    # - two important tools
+    conda install -y mamba -c conda-forge                
+    pip install pip-review -y
 }                                                        
                                                          
+#----------------
 init_conda () {
     env=$1
+
     if [[ -f $env/etc/profile.d/conda.sh ]]; then
         source $env/etc/profile.d/conda.sh
         conda activate $env
@@ -65,106 +57,140 @@ init_conda () {
     fi
 }
 
-case $runname in
-    dcmenv)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    dcmenvl)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-l
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    dcmenvx)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-x
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    mforge)
-        export condaenv=${conda_home}/miniforge3
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    mbforge)
-        export condaenv=${conda_home}/mambaforge
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    ai | aiconda)
-        export condaenv=${ai_home}
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    rconda)
-        export condaenv=${ros_home}
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    mconda)
-        export condaenv=${conda_home}/miniconda3
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    mcondax)
-        export condaenv=${conda_home}/miniconda3-intel
-        export PATH=${condaenv}/bin:$PATH
-        ;;
-    aconda)
-        export condaenv=${conda_home}/anaconda3
-        export PATH=${conda_home}/anaconda3/bin:$PATH
-        ;;
-    conda)
-        export condaenv=${conda_home}/anaconda3
-        export PATH=${conda_home}/anaconda3/bin:$PATH
-        ;;
-esac
-init_conda $condaenv
-
-condabin=`dirname $CONDA_EXE`
-
-condauc () {
-    if command -v mamba &> /dev/null
-    then
-        mamba $1 --all -y
-    else
-        conda $1 --all -y
-    fi
+#----------------
+pipup () {
+    pip-review -a
 }
 
+#----------------
+condauc () {
+    conda $1 --all -y
+}
+
+#----------------
 condaup () {
     condauc update
 }
 
+#----------------
 condaclean () {
     condauc clean
 }
 
+#----------------
 acondaup () {
     conda update anaconda --all -y
 }
 
+#----------------
+conda_export () {
+    conda env export --no-builds | grep -v "^prefix: " > $1
+}
+
+#----------------
+conda_from_file () {
+    mamba env update --file $1
+}
+
+#----------------
 cdea () {
     conda deactivate
 }
 
+#----------------
 cact () {
     conda activate $1
 }
 
+#----------------
 cinfo () {
     conda info
 }
 
+#----------------
 cel () {
     conda env list
 }
 
+#----------------
 jnb () {
     $condabin/jupyter-notebook
 }
 
+#----------------
 jlab () {
     $condabin/jupyter-lab
 }
 
+#----------------
 pynv () {
     Open /Applications/Anaconda-Navigator.app
 }
 
+#----------------
 install_conda_basic () {                                 
     basic=(jupyter matplotlib numpy pandas scipy seaborn)
     mamba install -y -c conda-forge ${basic[@]}          
 }                                                        
+
+#---------------------------------------------------------
+# main function
+
+runname=`basename $0`
+os=`uname`
+
+conda_home=/opt/conda
+ai_home=/opt/AI
+ros_home=/opt/ros/conda_venv
+
+if [[ $os == Darwin ]]; then
+  condabase=${conda_home}/mambaforge
+elif [[ $os == Linux ]]; then
+  condabase=${conda_home}/miniconda3-linux
+fi
+
+condash=$condabase/etc/profile.d/conda.sh
+
+if [[ -f $condash ]]; then
+    source $condash
+    conda activate $env
+fi
+
+case $runname in
+    dcmenv)
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
+        ;;
+    dcmenvl)
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-l
+        ;;
+    dcmenvx)
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-x
+        ;;
+    mbforge)
+        export condaenv=${conda_home}/mambaforge
+        ;;
+    ai | aiconda)
+        export condaenv=${ai_home}
+        ;;
+    rconda)
+        export condaenv=${ros_home}
+        ;;
+    mconda)
+        export condaenv=${conda_home}/miniconda3
+        ;;
+    mcondal)
+        export condaenv=${conda_home}/miniconda3-linux
+        ;;
+    xconda)
+        export condaenv=${conda_home}/miniconda3-x86_64
+        ;;
+    *)
+        export condaenv=${conda_home}/anaconda3
+        ;;
+esac
+
+export PATH=${condaenv}/bin:$PATH
+init_conda $condaenv
+
+condabin=`dirname $CONDA_EXE`
+

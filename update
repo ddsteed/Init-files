@@ -16,8 +16,7 @@
 
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-        # update=(mac abrew xbrew ai mforge mbforge mconda mcondax aconda)
-        update=(mac abrew xbrew ai mbforge mcondax)
+        update=(mac abrew xbrew ai mbforge xconda)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi
@@ -71,17 +70,7 @@ for mission in ${update[@]}; do
             
             softwareupdate --all --install --force
             ;;
-        abrew | xbrew)
-            source  ~/Init/$mission
-            printc_d " Updating Homebrew ($mission) applications ... "
-            echo
-            echo     "   *  BREW HOME: $HOMEBREW_REPOSITORY"
-            echo
-
-            brewup
-            brew cleanup
-            ;;
-        mbforge | mforge | aconda | mconda | mcondal | mcondax | ai)
+        *forge | ai | dcm* | *conda*)
             source ~/Init/$mission
 
             printc_d " Updating $condaenv ... "
@@ -90,6 +79,8 @@ for mission in ${update[@]}; do
             condaup
             if [[ $mission == aconda ]]; then acondaup; fi
             condaclean
+            
+            pipup
             ;;
         apt)
             printc_d " Updating Ubuntu Linux apt softwares ... "
