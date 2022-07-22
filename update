@@ -70,6 +70,17 @@ for mission in ${update[@]}; do
             
             softwareupdate --all --install --force
             ;;
+        *brew*)
+            source  ~/Init/$mission
+            printc_d " Updating Homebrew ($mission) applications ... "
+            echo
+            echo     "   *  BREW HOME: $HOMEBREW_REPOSITORY"
+            echo
+
+            brewup
+            brew cleanup
+            ;;
+
         *forge | ai | dcm* | *conda*)
             source ~/Init/$mission
 
@@ -79,8 +90,6 @@ for mission in ${update[@]}; do
             condaup
             if [[ $mission == aconda ]]; then acondaup; fi
             condaclean
-            
-            pipup
             ;;
         apt)
             printc_d " Updating Ubuntu Linux apt softwares ... "
