@@ -207,6 +207,11 @@ case $runname in
         alias dcmclone='git clone /Users/fengh/Research/DCM'
         alias fpull3='fgit pull github3 develop'
         ;;
+    safer)
+        source ~/Init/dcmenv
+        alias slave='~/Research/FORECAST/DCM/SAFER/src/slave/slave.py'
+        alias master='~/Research/FORECAST/DCM/SAFER/src/master/master.py'
+        ;;
     *)
         ;;
 esac

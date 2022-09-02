@@ -22,6 +22,8 @@
 #   - arm:
 #       dcmenvl:  dcm python virtual environment (venv) with multipass-Linux 
 #       mcondal:  miniconda3 + Linux
+# For Ubuntu Linux with GPU
+#       dcmenvg:  dcm conda environment with GPU
 #-----------------------------------------------------------------------
 create_conda () {                                        
     name=$1                                              
@@ -46,6 +48,7 @@ init_conda () {
     if [[ -f $env/etc/profile.d/conda.sh ]]; then
         source $env/etc/profile.d/conda.sh
         conda activate $env
+        condabin=`dirname $CONDA_EXE`
     elif [[ -f $env/bin/activate ]]; then
         source $env/bin/activate
     else
@@ -140,7 +143,7 @@ runname=`basename $0`
 os=`uname`
 
 conda_home=/opt/conda
-ai_home=/opt/AI
+ai_home=/opt/conda/AI
 ros_home=/opt/ros/conda_venv
 
 if [[ $os == Darwin ]]; then
@@ -159,6 +162,9 @@ fi
 case $runname in
     dcmenv)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
+        ;;
+    dcmenvg)
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-gpu
         ;;
     dcmenvl)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-l
@@ -191,6 +197,3 @@ esac
 
 export PATH=${condaenv}/bin:$PATH
 init_conda $condaenv
-
-condabin=`dirname $CONDA_EXE`
-
