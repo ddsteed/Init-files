@@ -2,6 +2,9 @@
 #
 runname=`basename $0`
 
+# activate office diff
+source ~/.officecomp/bin/activate
+
 case $runname in
     dcm)
         repository=(github1 github2 github3 github4 github5)  # remote repository name
