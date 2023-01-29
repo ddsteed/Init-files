@@ -1,31 +1,31 @@
-u20=192.168.64.15
+u22=192.168.64.16
 
 mln () {
   multipass launch --name $1 -c 4 -m 8G -d 50G
 }
 
 shm () {
-  ssh -X -Y f1@$u20
+  ssh -X -Y f1@$u22
 }
 
 ms () {
-  multipass shell u20
+  multipass shell u22
 }
 
 mstop () {
-  multipass stop u20
+  multipass stop u22
 }
 
 mst () {
-  multipass start u20
+  multipass start u22
 }
 
 mrs () {
-  multipass restart u20
+  multipass restart u22
 }
 
 min () {
-  multipass info u20
+  multipass info u22
 }
 
 alias mls='multipass ls'

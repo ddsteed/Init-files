@@ -142,7 +142,7 @@ gcom () {
 }
 
 gtest () {
-    gcom "test ..."
+    gcom "update on `date` "
 }
 
 gpush () {
@@ -212,8 +212,8 @@ case $runname in
         ;;
     safer)
         source ~/Init/dcmenv
-        alias slave='~/Research/FORECAST/DCM/SAFER/src/slave/slave.py'
-        alias master='~/Research/FORECAST/DCM/SAFER/src/master/master.py'
+        alias slave='/Users/fengh/Research/FORECAST/DCM/SAFER/src/slave/slave.py'
+        alias master='/Users/fengh/Research/FORECAST/DCM/SAFER/src/master/master.py'
         ;;
     *)
         ;;

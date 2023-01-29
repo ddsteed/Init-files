@@ -10,18 +10,17 @@
 #---
 # For Apple M1 Silicon CPU:
 #   - arm:
-#       mbforge:  mambaforge
 #       ai:       AI envs
-#       mconda:   miniconda3
+#       cloud:    Cloud envs
 #       dcmenv:   dcm conda environment with arm64
+#       django:   Google Django
+#       mbforge:  mambaforge
 #   - x86_64:
 #       dcmenvx:  dcm conda environment with x86_64
 #       rconda:   ROS envs
-#       xconda:   miniconda3 + x86_64
 # For multipass Ubuntu Linux
 #   - arm:
 #       dcmenvl:  dcm python virtual environment (venv) with multipass-Linux 
-#       mcondal:  miniconda3 + Linux
 # For Ubuntu Linux with GPU
 #       dcmenvg:  dcm conda environment with GPU
 #-----------------------------------------------------------------------
@@ -52,11 +51,14 @@ init_conda () {
     elif [[ -f $env/bin/activate ]]; then
         source $env/bin/activate
     else
-        echo
-        echo "$env does NOT exist, create it firstly."
-        echo "----------------------------------------------------"
-        echo
-        create_conda $env
+        conda activate $env
+        if [ $? -ne 0 ]; then
+            echo
+            echo "$env does NOT exist, create it firstly."
+            echo "----------------------------------------------------"
+            echo
+            create_conda $env
+        fi
     fi
 }
 
@@ -125,16 +127,16 @@ jlab () {
     $condabin/jupyter-lab
 }
 
-#----------------
-pynv () {
-    Open /Applications/Anaconda-Navigator.app
-}
-
-#----------------
+#----#----------------
 install_conda_basic () {                                 
     basic=(jupyter matplotlib numpy pandas scipy seaborn)
     mamba install -y -c conda-forge ${basic[@]}          
 }                                                        
+
+#----------------
+pyenv () {
+    python -m venv $1
+}
 
 #---------------------------------------------------------
 # main function
@@ -160,6 +162,12 @@ if [[ -f $condash ]]; then
 fi
 
 case $runname in
+    ai | aiconda)
+        export condaenv=${ai_home}
+        ;;
+    cloud)
+        export condaenv=${conda_home}/Cloud
+        ;;
     dcmenv)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
         ;;
@@ -172,23 +180,14 @@ case $runname in
     dcmenvx)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-x
         ;;
+    django)
+        export condaenv=/Users/fengh/Research/Cloud/GoogleCloudPlatform/eb-virt
+        ;;
     mbforge)
         export condaenv=${conda_home}/mambaforge
         ;;
-    ai | aiconda)
-        export condaenv=${ai_home}
-        ;;
     rconda)
         export condaenv=${ros_home}
-        ;;
-    mconda)
-        export condaenv=${conda_home}/miniconda3
-        ;;
-    mcondal)
-        export condaenv=${conda_home}/miniconda3-linux
-        ;;
-    xconda)
-        export condaenv=${conda_home}/miniconda3-x86_64
         ;;
     *)
         export condaenv=${conda_home}/anaconda3
