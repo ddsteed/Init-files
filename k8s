@@ -1,0 +1,45 @@
+#!/usr/bin/env   bash
+
+runname=`basename $0`
+
+#---
+# minikube
+alias mk='minikube'
+alias mkk='minikube kubectl'
+alias mkrm='minikube delete'
+alias mks='minikube start'
+alias mksp='minikube stop'
+alias mkst='minikube status'
+
+mkhelp () {
+    alias | grep mk
+}
+
+mkstart () {
+    minikube start \
+             --cpus=4 \
+             --memory=4096 \
+             --image-mirror-country='cn' 
+}
+
+#---
+# kubectl
+alias kb='kubectl'
+alias kba='kubectl apply -f'
+alias kbc='kubectl create'
+alias kbcf='kubectl create -f'
+alias kbcn='kubectl create namespace'
+alias kbcon='kubectl config'
+alias kbd='kubectl describe'
+alias kbg='kubectl get'
+alias kbgn='kubectl get namespaces'
+alias kbgnd='kubectl get nodes'
+alias kbgp='kubectl get pods'
+alias kbr='kubectl run'
+alias kbrm='kubectl delete'
+alias kbrmn='kubectl delete namespaces'
+alias kbrmp='kubectl delete pod'
+
+kbhelp () {
+    alias | grep kb
+}

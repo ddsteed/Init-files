@@ -87,3 +87,9 @@ shfat () {
     cpfat $1 ~/.zshrc
     ssh -X -Y $fat
 }
+
+upfat () {
+    tar zcvf xxx.tgz $1
+    cpfat $2 ./xxx.tgz
+    rm xxx.tgz
+}

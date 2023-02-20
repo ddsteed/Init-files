@@ -19,10 +19,6 @@ case $runname in
         ;;
 esac
 
-abi () {
-    abrew install $1
-}
-
 abrewup () {
     abrew update && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
 }
@@ -37,6 +33,26 @@ abrewun () {
 
 abrewclean () {
   abrew ls --$1 | xargs brew remove -f --ignore-dependencies
+}
+
+brewup-b () {
+    brew update && brew upgrade && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
+}
+
+bin () {
+    brew install $1 -v --force
+}
+
+bcin () {
+    brew install $1 -v --force --cask
+}
+
+brewun () {
+  arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
+}
+
+brewclean () {
+  brew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
 xbi () {
@@ -61,8 +77,11 @@ xbrewclean () {
 
 brewup () {
     case $runname in
-        brew | abrew)
+        abrew)
             abrewup
+            ;;
+        brew)
+            brewup-b
             ;;
         xbrew)
             xbrewup
