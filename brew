@@ -35,26 +35,6 @@ abrewclean () {
   abrew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
-brewup-b () {
-    brew update && brew upgrade && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
-}
-
-bin () {
-    brew install $1 -v --force
-}
-
-bcin () {
-    brew install $1 -v --force --cask
-}
-
-brewun () {
-  arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
-}
-
-brewclean () {
-  brew ls --$1 | xargs brew remove -f --ignore-dependencies
-}
-
 xbi () {
     xbrew install $1
 }
@@ -71,7 +51,7 @@ xbrewun () {
   arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
 }
 
-xbrewclean () {
+xbrewrm () {
   xbrew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
@@ -89,8 +69,25 @@ brewup () {
     esac
 }
 
-brewclean () {
-    brew ls --$1 | xargs brew remove -f --ignore-dependencies
+brewup-b () {
+    brew update && brew upgrade && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
+}
+
+bin () {
+    opt=
+    if [[ $2 == "cask" || $2 == "c" ]]; then
+        opt="--cask"
+    fi
+
+    brew install $1 -v --force $opt
+}
+
+brewunstall () {
+  arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
+}
+
+brewrm () {
+  brew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
 #-------------------------------------------

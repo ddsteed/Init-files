@@ -3,7 +3,9 @@
 # This script is to iniatize python environment
 #---
 # Author: Hao Feng (F1)
-# Date:   Apr. 21, 2022
+#
+# Init Date:   Apr. 21, 2022
+# last Date:   Mar. 23, 2023
 #
 # Copyright (c) 2022, RDS
 #
@@ -11,19 +13,14 @@
 # For Apple M1 Silicon CPU:
 #   - arm:
 #       ai:       AI envs
+#       bd:       Baidu AI: paddle
 #       cloud:    Cloud envs
 #       dcmenv:   dcm conda environment with arm64
-#       django:   Google Django
 #       mbforge:  mambaforge
 #   - x86_64:
-#       dcmenvx:  dcm conda environment with x86_64
 #       rconda:   ROS envs
-# For multipass Ubuntu Linux
-#   - arm:
-#       dcmenvl:  dcm python virtual environment (venv) with multipass-Linux 
-# For Ubuntu Linux with GPU
-#       dcmenvg:  dcm conda environment with GPU
 #-----------------------------------------------------------------------
+
 create_conda () {                                        
     name=$1                                              
                                                          
@@ -165,23 +162,14 @@ case $runname in
     ai | aiconda)
         export condaenv=${ai_home}
         ;;
+    bd)
+        export condaenv=${conda_home}/bd
+        ;;
     cloud)
         export condaenv=${conda_home}/Cloud
         ;;
     dcmenv)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
-        ;;
-    dcmenvg)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-gpu
-        ;;
-    dcmenvl)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-l
-        ;;
-    dcmenvx)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs-x
-        ;;
-    django)
-        export condaenv=/Users/fengh/Research/Cloud/GoogleCloudPlatform/eb-virt
         ;;
     mbforge)
         export condaenv=${conda_home}/mambaforge

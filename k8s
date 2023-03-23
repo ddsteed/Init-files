@@ -18,7 +18,7 @@ mkhelp () {
 mkstart () {
     minikube start \
              --cpus=4 \
-             --memory=4096 \
+             --memory=6144 \
              --image-mirror-country='cn' 
 }
 
