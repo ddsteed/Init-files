@@ -142,10 +142,6 @@ gtest () {
     gcom "update on `date` "
 }
 
-gpll () {
-    git pull github develop
-}
-
 gpush () {
     git push github --follow-tags
 }
