@@ -5,7 +5,7 @@
 # Author: Hao Feng (F1)
 #
 # Init Date:   Apr. 21, 2022
-# last Date:   Mar. 23, 2023
+# last Date:   Apr. 01, 2023
 #
 # Copyright (c) 2022, RDS
 #
@@ -15,7 +15,8 @@
 #       ai:       AI envs
 #       bd:       Baidu AI: paddle
 #       cloud:    Cloud envs
-#       dcmenv:   dcm conda environment with arm64
+#       dcm:      dcm conda environment with arm64
+#       fpa:      Fatavay Physics based AI
 #       mbforge:  mambaforge
 #   - x86_64:
 #       rconda:   ROS envs
@@ -26,7 +27,7 @@ create_conda () {
                                                          
     if [[ ! -f $name ]]; then                            
         init_conda $condabase
-        conda create -y -p $name python=3.9                        
+        conda create -y -p $name python=3.10
     fi                                                   
                                                          
     conda activate $name                                 
@@ -34,7 +35,7 @@ create_conda () {
 
     # - two important tools
     conda install -y mamba -c conda-forge                
-    pip install pip-review -y
+#   pip install pip-review -y
 }                                                        
                                                          
 #----------------
@@ -148,7 +149,7 @@ ros_home=/opt/ros/conda_venv
 if [[ $os == Darwin ]]; then
   condabase=${conda_home}/mambaforge
 elif [[ $os == Linux ]]; then
-  condabase=${conda_home}/miniconda3-linux
+  condabase=${conda_home}/miniconda3
 fi
 
 condash=$condabase/etc/profile.d/conda.sh
@@ -162,17 +163,11 @@ case $runname in
     ai | aiconda)
         export condaenv=${ai_home}
         ;;
-    bd)
-        export condaenv=${conda_home}/bd
+    bd | cloud | fpa | mbforge)
+        export condaenv=${conda_home}/$runname
         ;;
-    cloud)
-        export condaenv=${conda_home}/Cloud
-        ;;
-    dcmenv)
+    dcm)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
-        ;;
-    mbforge)
-        export condaenv=${conda_home}/mambaforge
         ;;
     rconda)
         export condaenv=${ros_home}

@@ -4,7 +4,8 @@
 # This script is to update all Mac/Linux softwares
 #
 # Author: Hao Feng (F1)
-# Date:   Mar. 13, 2022
+# Init Date:   Mar. 13, 2022
+# Last Date:   Apr. 01, 2023
 #
 # Copyright (c) 2022, RDS
 #-----------------------------------------------------------------------
@@ -16,8 +17,7 @@
 
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-#       update=(mac abrew xbrew ai bd cloud mbforge)
-        update=(mac brew ai bd cloud mbforge)
+        update=(mac brew ai mbforge)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi
