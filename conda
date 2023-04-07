@@ -1,25 +1,20 @@
 #!/usr/bin/env zsh
 #-----------------------------------------------------------------------
-# This script is to iniatize python environment
+# This script is to iniatize python conda/virtual environment
 #---
 # Author: Hao Feng (F1)
 #
 # Init Date:   Apr. 21, 2022
-# last Date:   Apr. 01, 2023
+# last Date:   Apr. 07, 2023
 #
 # Copyright (c) 2022, RDS
 #
 #---
-# For Apple M1 Silicon CPU:
-#   - arm:
-#       ai:       AI envs
-#       bd:       Baidu AI: paddle
-#       cloud:    Cloud envs
-#       dcm:      dcm conda environment with arm64
-#       fpa:      Fatavay Physics based AI
-#       mbforge:  mambaforge
-#   - x86_64:
-#       rconda:   ROS envs
+#   ai:       AI envs
+#   bd:       Baidu AI: paddle
+#   cloud:    Cloud envs
+#   dcmenv:   dcm conda environment with arm64
+#   fpa:      Fatavay Physics based AI
 #-----------------------------------------------------------------------
 
 create_conda () {                                        
@@ -144,20 +139,6 @@ os=`uname`
 
 conda_home=/opt/conda
 ai_home=/opt/conda/AI
-ros_home=/opt/ros/conda_venv
-
-if [[ $os == Darwin ]]; then
-  condabase=${conda_home}/mambaforge
-elif [[ $os == Linux ]]; then
-  condabase=${conda_home}/miniconda3
-fi
-
-condash=$condabase/etc/profile.d/conda.sh
-
-if [[ -f $condash ]]; then
-    source $condash
-    conda activate $env
-fi
 
 case $runname in
     ai | aiconda)
@@ -166,11 +147,8 @@ case $runname in
     bd | cloud | fpa | mbforge)
         export condaenv=${conda_home}/$runname
         ;;
-    dcm)
+    dcmenv)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
-        ;;
-    rconda)
-        export condaenv=${ros_home}
         ;;
     *)
         export condaenv=${conda_home}/anaconda3
