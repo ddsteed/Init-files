@@ -17,7 +17,7 @@
 
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-        update=(mac brew ai mbforge)
+        update=(mac brew ai)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi

@@ -11,9 +11,7 @@
 #
 #---
 #   ai:       AI envs
-#   bd:       Baidu AI: paddle
-#   cloud:    Cloud envs
-#   dcmenv:   dcm conda environment with arm64
+#   dcmenv:   dcm conda environment
 #   fpa:      Fatavay Physics based AI
 #-----------------------------------------------------------------------
 
@@ -138,14 +136,18 @@ runname=`basename $0`
 os=`uname`
 
 conda_home=/opt/conda
-ai_home=/opt/conda/AI
+ai_home=~/Research/AI
+fpa_home=~/Research/FPA
 
 case $runname in
     ai | aiconda)
-        export condaenv=${ai_home}
+        export condaenv=${ai_home}/envs
         ;;
-    bd | cloud | fpa | mbforge)
+    bd | cloud | mbforge)
         export condaenv=${conda_home}/$runname
+        ;;
+    fpa)
+        export condaenv=${fpa_home}/envs
         ;;
     dcmenv)
         export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
