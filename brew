@@ -82,6 +82,14 @@ bin () {
     brew install $1 -v --force $opt
 }
 
+bup () {
+    brew upgrade $1 -v
+}
+
+bun () {
+    brew uninstall $1 -v
+}
+
 brewunstall () {
   arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
 }
