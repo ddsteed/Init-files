@@ -1,78 +1,23 @@
 #!/usr/bin/env   zsh
 
+#-----------------------------------------------------------------------
+# This script is to operate HomeBrew system.
+#
+# Author: Hao Feng (F1)
+# Init Date:   Mar. 13, 2019
+# Last Date:   Apr. 24, 2023
+#
+# Copyright (c) 2019, RDS
+#-----------------------------------------------------------------------
+
 runname=`basename $0`
 
-case $runname in
-    brew | abrew)
-        eval $(/opt/Homebrew/bin/brew shellenv) #ckbrew
-
-        abrew () {
-            arch -arm64e /opt/homebrew/bin/brew $@
-        } 
-        ;;
-    xbrew)
-        eval $(/usr/local/Homebrew/bin/brew shellenv) #ckbrew
-
-        xbrew () {
-            arch -x86_64 /usr/local/bin/brew $@
-        }
-        ;;
-esac
-
-abrewup () {
-    abrew update && abrew upgrade && abrew cu -a -f -y && /opt/homebrew/bin/mas upgrade
-}
-
-abrewin () {
-    arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
-}
-
-abrewun () {
-  arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
-}
-
-abrewclean () {
-  abrew ls --$1 | xargs brew remove -f --ignore-dependencies
-}
-
-xbi () {
-    xbrew install $1
-}
-
-xbrewup () {
-    xbrew update && xbrew upgrade && xbrew cu -a -f -y && arch -x86_64 /usr/local/bin/mas upgrade
-}
-
-brewin () {
-  arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
-}
-
-xbrewun () {
-  arch -x86_64 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
-}
-
-xbrewrm () {
-  xbrew ls --$1 | xargs brew remove -f --ignore-dependencies
-}
-
+#- update/upgrade all apps
 brewup () {
-    case $runname in
-        abrew)
-            abrewup
-            ;;
-        brew)
-            brewup-b
-            ;;
-        xbrew)
-            xbrewup
-            ;;
-    esac
-}
-
-brewup-b () {
     brew update && brew upgrade && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
 }
 
+#- install app
 bin () {
     opt=
     if [[ $2 == "cask" || $2 == "c" ]]; then
@@ -82,19 +27,34 @@ bin () {
     brew install $1 -v --force $opt
 }
 
+#- upgrade app
 bup () {
     brew upgrade $1 -v
 }
 
+#- uninstall app
 bun () {
     brew uninstall $1 -v
 }
 
-brewunstall () {
+#- backup all brew apps
+brewbk () {
+    brew bundle dump --file=~/.backup/Brewfile -f
+}
+
+#- restore all brew apps from backup file
+brewrt () {
+    brew bundle --file=~/.backup/Brewfile
+}
+
+#---
+# brew system operations
+
+brew_unstall () {
   arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
 }
 
-brewrm () {
+brew_rm () {
   brew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
@@ -102,4 +62,3 @@ brewrm () {
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles #ckbrew
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_ENV_HINTS=1
-

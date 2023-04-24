@@ -32,7 +32,7 @@ alias duh='ncdu'
 # htop: top命令的替代品，用来显示系统的实时状态。
 
 # procs: ps命令的替代品，用来高亮显示进程信息。
-alias ps='procs'
+alias pcs='procs'
 
 # httpie: curl 的替代品，用来发出 HTTP 请求。
 #     http PUT example.com hello=world 
