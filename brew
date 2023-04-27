@@ -14,7 +14,7 @@ runname=`basename $0`
 
 #- update/upgrade all apps
 brewup () {
-    brew update && brew upgrade && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
+    brew update && brew upgrade --greedy && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
 }
 
 #- install app
@@ -25,6 +25,15 @@ bin () {
     fi
 
     brew install $1 -v --force $opt
+}
+
+brin () {
+    opt=
+    if [[ $2 == "cask" || $2 == "c" ]]; then
+        opt="--cask"
+    fi
+
+    brew reinstall $1 -v --force $opt
 }
 
 #- upgrade app
@@ -39,11 +48,17 @@ bun () {
 
 #- backup all brew apps
 brewbk () {
+    echo "backup brew apps ... "
+    echo "----------------"
+    echo
     brew bundle dump --file=~/.backup/Brewfile -f
 }
 
 #- restore all brew apps from backup file
 brewrt () {
+    echo "restore brew apps ... "
+    echo "-----------------"
+    echo
     brew bundle --file=~/.backup/Brewfile
 }
 

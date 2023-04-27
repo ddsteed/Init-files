@@ -70,7 +70,7 @@ for mission in ${update[@]}; do
             echo
             
             softwareupdate --all --install --force
-            ;;
+           ;;
         *brew*)
             source  ~/Init/$mission
             printc_d " Updating Homebrew ($mission) applications ... "
