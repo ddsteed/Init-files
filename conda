@@ -150,7 +150,7 @@ case $runname in
         export condaenv=${fpa_home}/envs
         ;;
     dcmenv)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
+        export condaenv=/Users/fengh/Research/FORECAST/DCM/SAFER/envs
         ;;
     *)
         export condaenv=${conda_home}/anaconda3

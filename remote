@@ -29,7 +29,7 @@ case $runname in
         safer="safer@$fat5ip"
 
         port=22
-    ;;
+        ;;
     ngrok)
         ngfatip="0.tcp.ngrok.io"
         port=17777
@@ -45,7 +45,13 @@ case $runname in
         }
 
         alias ngdcm='ngfat dcm $port'
-    ;;
+        ;;
+    shu)
+        shuip="175.155.64.34"
+        shu="f1@$shuip"
+
+        port=22
+        ;;
 esac
 
 cpfat () {
@@ -71,6 +77,9 @@ cpfat () {
         ng)
             fat=dcm@0.tcp.ap.ngrok.io
             ;;
+        shu)
+            fat=$shu
+            ;;
     esac
     
     scp -P $port $2 $fat:~/.
@@ -83,6 +92,7 @@ shfat () {
     if [[ $1 == 4 ]]; then fat=$fat4; fi
     if [[ $1 == 5 ]]; then fat=$fat5; fi
     if [[ $1 == 's' ]]; then fat=$safer; fi
+    if [[ $1 == 'shu' ]]; then fat=$shu; fi
     
     cpfat $1 ~/.zshrc
     ssh -X -Y $fat
