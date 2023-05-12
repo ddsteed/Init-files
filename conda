@@ -20,7 +20,10 @@ create_conda () {
                                                          
     if [[ ! -f $name ]]; then                            
 #       init_conda $condabase
-        conda create -y -p $name python=3.10
+ 
+        py_version=`python --version | awk '{print $2}'`
+        version=`echo ${py_version%.*}`
+        conda create -y -p $name python=$version
     fi                                                   
                                                          
     conda activate $name                                 
