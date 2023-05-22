@@ -34,3 +34,7 @@ alias mf='multipass find'
 mm () {
     multipass mount $1 $2
 }
+
+mfengh () {
+  mm /Users/fengh u22:/Users/fengh
+}
