@@ -13,6 +13,7 @@
 #   ai:       AI envs
 #   dcmenv:   dcm conda environment
 #   fpa:      Fatavay Physics based AI
+#   mbforge:  MambaForge
 #-----------------------------------------------------------------------
 
 create_conda () {                                        
@@ -138,25 +139,26 @@ pyenv () {
 runname=`basename $0`
 os=`uname`
 
-conda_home=/opt/conda
+mb_home=/opt/Homebrew/Caskroom/mambaforge/base
 ai_home=~/Research/AI
 fpa_home=~/Research/FPA
+dcm_home=~/Research/FORECAST/DCM
 
 case $runname in
     ai | aiconda)
         export condaenv=${ai_home}/envs
         ;;
-    bd | cloud | mbforge)
-        export condaenv=${conda_home}/$runname
-        ;;
     fpa)
         export condaenv=${fpa_home}/envs
         ;;
     dcmenv)
-        export condaenv=/Users/fengh/Research/FORECAST/DCM/envs
+        export condaenv=${dcm_home}/envs
+        ;;
+    mbforge)
+        export condaenv=${mb_home}
         ;;
     *)
-        export condaenv=${conda_home}/anaconda3
+        export condaenv=${mb_home}
         ;;
 esac
 
