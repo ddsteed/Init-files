@@ -14,7 +14,7 @@ runname=`basename $0`
 
 #- update/upgrade all apps
 brewup () {
-    brew update && brew upgrade --greedy && brew cu -a -f -y && /opt/homebrew/bin/mas upgrade
+    brew update && brew upgrade && brew cu -a -y && /opt/homebrew/bin/mas upgrade
 }
 
 #- install app
@@ -74,6 +74,3 @@ brew_rm () {
 }
 
 #-------------------------------------------
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles #ckbrew
-export HOMEBREW_NO_INSTALL_CLEANUP=1
-export HOMEBREW_NO_ENV_HINTS=1

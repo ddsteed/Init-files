@@ -1,7 +1,7 @@
 #!/usr/bin/env   bash
 
 os=`uname`
-ip0='192.168.10.27'
+ip0='192.168.10.28'
 
 case $os in
     Darwin)
