@@ -22,7 +22,7 @@ create_conda () {
     if [[ ! -f $name ]]; then                            
 #       init_conda $condabase
  
-        py_version=`python --version | awk '{print $2}'`
+        py_version=`python3 --version | awk '{print $2}'`
         version=`echo ${py_version%.*}`
         conda create -y -p $name python=$version
     fi                                                   
@@ -130,7 +130,7 @@ install_conda_basic () {
 
 #----------------
 pyenv () {
-    python -m venv $1
+    python3 -m venv $1
 }
 
 #---------------------------------------------------------
@@ -140,8 +140,8 @@ runname=`basename $0`
 os=`uname`
 
 mb_home=/opt/Homebrew/Caskroom/mambaforge/base
-ai_home=~/Research/AI
-fpa_home=~/Research/FPA
+ai_home=~/Research/AI/AI
+fpa_home=~/Research/AI/FPA
 dcm_home=~/Research/FORECAST/DCM
 
 case $runname in
