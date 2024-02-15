@@ -17,7 +17,7 @@
 
 if [[ $2 == "" ]]; then
     if [[ `uname` == "Darwin" ]]; then
-        update=(mac brew ai)
+        update=(mac brew ai llm)
     elif [[ `uname` == "Linux" ]]; then
         update=(apt)
     fi
@@ -82,7 +82,7 @@ for mission in ${update[@]}; do
             brew cleanup
             ;;
 
-        *forge | ai | bd | dcm* | *conda* | cloud)
+        *forge | ai | bd | dcm* | *conda* | cloud | llm)
             source ~/Init/$mission
 
             printc_d " Updating $condaenv ... "

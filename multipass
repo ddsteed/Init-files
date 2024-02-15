@@ -1,4 +1,4 @@
-u22=192.168.64.16
+u22=192.168.64.20
 
 mln () {
   multipass launch --name $1 -c 4 -m 8G -d 50G

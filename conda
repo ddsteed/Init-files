@@ -13,15 +13,16 @@
 #   ai:       AI envs
 #   dcmenv:   dcm conda environment
 #   fpa:      Fatavay Physics based AI
+#   kgai:     Knowledge Graph AI
+#   llm:      Large Language Model
 #   mbforge:  MambaForge
+#   mconda:   Miniconda
 #-----------------------------------------------------------------------
 
 create_conda () {                                        
     name=$1                                              
                                                          
     if [[ ! -f $name ]]; then                            
-#       init_conda $condabase
- 
         py_version=`python3 --version | awk '{print $2}'`
         version=`echo ${py_version%.*}`
         conda create -y -p $name python=$version
@@ -30,9 +31,6 @@ create_conda () {
     conda activate $name                                 
     conda config --env --add channels conda-forge        
 
-    # - two important tools
-    conda install -y mamba -c conda-forge                
-#   pip install pip-review -y
 }                                                        
                                                          
 #----------------
@@ -42,10 +40,10 @@ init_conda () {
     if [[ -f $env/etc/profile.d/conda.sh ]]; then
         source $env/etc/profile.d/conda.sh
         conda activate $env
-        condabin=`dirname $CONDA_EXE`
     elif [[ -f $env/bin/activate ]]; then
         source $env/bin/activate
     else
+        conda init zsh >& /dev/null
         conda activate $env
         if [ $? -ne 0 ]; then
             echo
@@ -55,6 +53,8 @@ init_conda () {
             create_conda $env
         fi
     fi
+
+    condabin=`which pip3 | xargs dirname`
 }
 
 #----------------
@@ -139,26 +139,46 @@ pyenv () {
 runname=`basename $0`
 os=`uname`
 
-mb_home=/opt/Homebrew/Caskroom/mambaforge/base
 ai_home=~/Research/AI/AI
-fpa_home=~/Research/AI/FPA
 dcm_home=~/Research/FORECAST/DCM
+fpa_home=~/Research/AI/FPA/FPA
+llm_home=~/Research/AI/LLM
+kgai_home=~/Research/AI/kgai
+mb_home=/opt/Homebrew/Caskroom/mambaforge/base
+mc_home=/opt/Homebrew/Caskroom/miniconda/base
 
 case $runname in
     ai | aiconda)
         export condaenv=${ai_home}/envs
+        export conda_name=ai
         ;;
     fpa)
         export condaenv=${fpa_home}/envs
+        export conda_name=fpa
         ;;
     dcmenv)
         export condaenv=${dcm_home}/envs
+        export conda_name=dcmenv
+        ;;
+    kgai)
+        export condaenv=${kgai_home}/envs
+        export conda_name=kgai
+        ;;
+    llm)
+        export condaenv=${llm_home}/envs
+        export conda_name=llm
         ;;
     mbforge)
         export condaenv=${mb_home}
+        export conda_name=mbforge
+        ;;
+    mconda)
+        export condaenv=${mc_home}
+        export conda_name=mconda
         ;;
     *)
-        export condaenv=${mb_home}
+        export condaenv=${mc_home}
+        export conda_name=mconda
         ;;
 esac
 

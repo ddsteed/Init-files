@@ -8,6 +8,11 @@ case $runname in
         branch=(stable master develop)                        # branch name
         bakrepo=(bak)                                         # backup repository name
         ;;
+    kg)
+        repository=(github)
+        branch=(main master develop)                          # branch name
+        bakrepo=(bak)                                         # backup repository name
+        ;;
     safer)
         repository=(github)
         branch=(master develop)                               # branch name

@@ -15,7 +15,7 @@ case $os in
            ip=$2
         fi
         echo "proxy ip = $ip"
-        export https_proxy=$ip:9999
-        export http_proxy=$ip:9999
+        export https_proxy=$ip:10001
+        export http_proxy=$ip:10001
     ;;
 esac
