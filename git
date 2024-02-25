@@ -160,6 +160,10 @@ gpull () {
     git pull github develop
 }
 
+gpullr () {
+  git pull --recurse-submodules
+}
+
 gfat () {
     git push fat$1
 }
