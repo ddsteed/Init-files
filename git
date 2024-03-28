@@ -160,10 +160,6 @@ gpull () {
     git pull github develop
 }
 
-gpullr () {
-  git submodule foreach 'git pull origin main'
-}
-
 gfat () {
     git push fat$1
 }
