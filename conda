@@ -15,7 +15,7 @@
 #   fpa:      Fatavay Physics based AI
 #   kgai:     Knowledge Graph AI
 #   llm:      Large Language Model
-#   mbforge:  MambaForge
+#   mforge:   Miniforge
 #   mconda:   Miniconda;   NEVER update miniconda manually!!!
 #-----------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ create_conda () {
     if [[ ! -f $name ]]; then                            
         py_version=`python3 --version | awk '{print $2}'`
         version=`echo ${py_version%.*}`
-        conda create -y -p $name python=$version
+        conda create -y -p $name python=$version conda
     fi                                                   
                                                          
     conda activate $name                                 
@@ -144,7 +144,7 @@ dcm_home=~/Research/FORECAST/DCM
 fpa_home=~/Research/AI/FPA/FPA
 llm_home=~/Research/AI/LLM
 kgai_home=~/Research/AI/kgai
-mb_home=/opt/Homebrew/Caskroom/mambaforge/base
+mf_home=/opt/Homebrew/Caskroom/miniforge/base
 mc_home=/opt/Homebrew/Caskroom/miniconda/base
 
 case $runname in
@@ -168,9 +168,9 @@ case $runname in
         export condaenv=${llm_home}/envs
         export conda_name=llm
         ;;
-    mbforge)
-        export condaenv=${mb_home}
-        export conda_name=mbforge
+    mforge)
+        export condaenv=${mf_home}
+        export conda_name=mforge
         ;;
     mconda)
         export condaenv=${mc_home}
