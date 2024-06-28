@@ -27,7 +27,7 @@ alias rgp='rg'
 # duf: df命令的替代品，用来显示磁盘占用情况。
 
 # ncdu: du命令的替代品，用来显示每个目录占用的大小。
-alias duh='ncdu'
+alias duh='ncdu --color dark'
 
 # htop: top命令的替代品，用来显示系统的实时状态。
 

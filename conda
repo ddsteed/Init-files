@@ -16,7 +16,7 @@
 #   kgai:     Knowledge Graph AI
 #   llm:      Large Language Model
 #   mbforge:  MambaForge
-#   mconda:   Miniconda
+#   mconda:   Miniconda;   NEVER update miniconda manually!!!
 #-----------------------------------------------------------------------
 
 create_conda () {                                        

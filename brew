@@ -14,7 +14,9 @@ runname=`basename $0`
 
 #- update/upgrade all apps
 brewup () {
-    brew update && brew upgrade && brew cu -a -y && /opt/homebrew/bin/mas upgrade
+#   brew update && brew upgrade && brew cu -a -y && /opt/homebrew/bin/mas upgrade
+    brew update 
+    brew upgrade && brew cu -a -y && /opt/homebrew/bin/mas upgrade
 }
 
 #- install app

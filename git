@@ -125,6 +125,7 @@ gck () {
     fi
 }
 
+alias gits='git status'
 alias gdev='gck develop'
 alias gstb='gck stable'
 alias gmas='gck master'
