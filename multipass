@@ -1,31 +1,37 @@
+image=24.04  # 20.04 22.04 24.04
+
 u22=192.168.64.22
+u24=192.168.65.4
+
+name=u24
+ubuntu=$u24
 
 mln () {
-  multipass launch --name $1 -c 4 -m 8G -d 50G
+  multipass launch $image --name $name -c 4 -m 8G -d 50G
 }
 
 shm () {
-  ssh -X -Y f1@$u22
+  ssh -X -Y f1@$ubuntu
 }
 
 ms () {
-  multipass shell u22
+  multipass shell $name
 }
 
 mstop () {
-  multipass stop u22
+  multipass stop $name
 }
 
 mst () {
-  multipass start u22
+  multipass start $name
 }
 
 mrs () {
-  multipass restart u22
+  multipass restart $name
 }
 
 min () {
-  multipass info u22
+  multipass info $name
 }
 
 alias mls='multipass ls'
@@ -36,5 +42,5 @@ mm () {
 }
 
 mfengh () {
-  mm /Users/fengh u22:/Users/fengh
+  mm /Users/fengh $name:/Users/fengh
 }
