@@ -2,10 +2,9 @@
 #-----------------------------------------------------------------------
 # This script is to iniatize python conda/virtual environment
 #---
-# Author: Hao Feng (F1)
-#
-# Init Date:   Apr. 21, 2022
-# last Date:   Apr. 07, 2023
+# Author:    Hao Feng (F1)
+# Init Date: Apr. 21, 2022
+# last Date: Feb. 28, 2025
 #
 # Copyright (c) 2022, RDS
 #
@@ -15,6 +14,7 @@
 #   fpa:      Fatavay Physics based AI
 #   kgai:     Knowledge Graph AI
 #   llm:      Large Language Model
+#   mapms:    Multi Agent Project Management System
 #   mforge:   Miniforge
 #   mconda:   Miniconda;   NEVER update miniconda manually!!!
 #-----------------------------------------------------------------------
@@ -143,6 +143,7 @@ ai_home=~/Research/AI/AI
 dcm_home=~/Research/FORECAST/DCM
 fpa_home=~/Research/AI/FPA/FPA
 llm_home=~/Research/AI/LLM
+mapms_home=~/Research/Fatavay/MAPMS
 kgai_home=~/Research/AI/kgai
 mf_home=/opt/Homebrew/Caskroom/miniforge/base
 mc_home=/opt/Homebrew/Caskroom/miniconda/base
@@ -167,6 +168,10 @@ case $runname in
     llm)
         export condaenv=${llm_home}/envs
         export conda_name=llm
+        ;;
+    mapms)
+        export condaenv=${mapms_home}/envs
+        export conda_name=mapms
         ;;
     mforge)
         export condaenv=${mf_home}

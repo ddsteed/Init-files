@@ -6,9 +6,9 @@
 runname=`basename $0`
 
 # exa:  ls命令的替代品，可以彩色输出目录内容，更容易辨识。
-alias ll='exa --long --git'
-alias lla='exa --all --long --git'
-alias ll2='exa --tree --level=2'
+alias ll='eza --long --git'
+alias lla='eza --all --long --git'
+alias ll2='eza --tree --level=2'
 
 # broot: 可以看作增强版的ls替代品，实际是一个终端里面的文件管理器。
 alias br='broot -sdph'

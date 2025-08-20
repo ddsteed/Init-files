@@ -3,11 +3,12 @@
 #-----------------------------------------------------------------------
 # This script is to operate HomeBrew system.
 #
-# Author: Hao Feng (F1)
-# Init Date:   Mar. 13, 2019
-# Last Date:   Apr. 24, 2023
+# Author:    Hao Feng (F1)
 #
-# Copyright (c) 2019, RDS
+# Init Date: Mar. 13, 2019
+# Last Date: Jun. 24, 2025
+#
+# Copyright (c) 2019-, RDS
 #-----------------------------------------------------------------------
 
 runname=`basename $0`
@@ -15,9 +16,27 @@ runname=`basename $0`
 #- update/upgrade all apps
 brewup () {
 #   brew update && brew upgrade && brew cu -a -y && /opt/homebrew/bin/mas upgrade
+    echo
+    echo "update homebrew ..."
+    echo "----------------------------"
     brew update 
+
+    echo
+    echo "upgrade all apps ... "
+    echo "----------------------------"
+
     brew upgrade 
-    brew cu -a -y 
+
+    echo
+    echo "upgrade all cask apps ... "
+    echo "----------------------------"
+
+    brew cu -a -f -y 
+
+    echo
+    echo "upgrade all mac apps ... "
+    echo "----------------------------"
+
     /opt/homebrew/bin/mas upgrade
 }
 
@@ -48,6 +67,11 @@ bup () {
 #- uninstall app
 bun () {
     brew uninstall $1 -v
+    # brew rmtree $1
+}
+
+brm () {
+    brew rmtree $1
 }
 
 #- backup all brew apps
@@ -63,18 +87,115 @@ brewrt () {
     echo "restore brew apps ... "
     echo "-----------------"
     echo
-    brew bundle --file=~/.backup/Brewfile
+    brew bundle --file=~/.backup/Brewfile --force
 }
 
 #---
 # brew system operations
 
-brew_unstall () {
-  arch -arm64e /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
+brewinstall () {
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
-brew_rm () {
-  brew ls --$1 | xargs brew remove -f --ignore-dependencies
+brewuninstall () {
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+}
+
+brewrm () {
+    brew ls --$1 | xargs brew remove -f --ignore-dependencies
+}
+
+#- reset official source
+brewreset () {
+    unset HOMEBREW_BREW_GIT_REMOTE
+    rm ~/.zprofile
+
+    case $1 in
+        ustc)
+            git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+            echo 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"' >! ~/.zprofile
+            ;;
+        official | *)
+            git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew
+            ;;
+    esac
+
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)" ' >> ~/.zprofile
+}
+
+#---
+#- brew 安装常用的软件
+# 添加第三方库
+brewtap () {
+    taps=(buo/cask-upgrade langgenius/dify beeftornado/rmtree mongodb/brew)
+
+    case $1 in
+        u)
+            run=untap
+            ;;
+        *)
+            run=tap
+            ;;
+    esac
+
+    for ap in $taps; do
+        brew $run $ap
+    done
+}
+
+brewapp () {
+    #-   先准备第三方库
+    brewtap
+    
+    #-   命令行
+    apps=(aider aspell autoconf autojump automake bat blueutil brew-rmtree btop
+          cmake cowsay difftastic dify duf duti epr eza ffmpeg fortune
+          gcc git gpg hugo jj libtool macchina macmon mactop mas mongodb-community mysql ncdu ngrok ollama
+          pandoc redis sleepwatcher sqlite tmux tree-sitter
+          uv vim wget yazi youtubedr 
+         )
+
+    #-   图形界面
+    appc=(alfred appcleaner arc baidunetdisk bean betterdisplay
+          calibre cherry-studio clash-verge-rev cursor docker-desktop drawio
+          easydict eclipse-ide emacs-app feishu fork gimp google-chrome
+          hammerspoon handbrake-app hiddenbar homerow iina iterm2
+          karabiner-elements lyricsx
+          macdown mactex maczip mendeley-reference-manager miniforge
+          namechanger neo4j-desktop netnewswire nimble-commander
+          obsidian ollama onyx orbstack rectangle shottr squirrel-app
+          tencent-meeting thunder trae visual-studio-code wechat wechatwork wine-stable
+          wljs-notebook wolfram-engine
+         )
+
+    case $1 in
+        c)
+            app=($appc)
+            run="install"
+            opt="--cask"
+            ;;
+        rc)
+            app=($appc)
+            run="reinstall"
+            opt="--cask"
+            ;;
+        r)
+            app=($apps)
+            run="reinstall"
+            opt=
+            ;;
+        *)
+            app=($apps)
+            run="install"
+            opt=
+            ;;
+    esac 
+
+    echo 
+    echo "$#app apps $opt will be installed ... "
+    echo "-----------------------------"
+    echo 
+    brew $run $app --force $opt
 }
 
 #-------------------------------------------
