@@ -163,7 +163,7 @@ brewapp () {
           karabiner-elements lyricsx
           macdown mactex maczip mendeley-reference-manager miniforge
           namechanger neo4j-desktop netnewswire nimble-commander
-          obsidian ollama onyx orbstack rectangle shottr squirrel-app
+          obsidian ollama onyx orbstack rectangle shottr squirrel-app superwhisper
           tencent-meeting thunder trae visual-studio-code wechat wechatwork wine-stable
           wljs-notebook wolfram-engine
          )

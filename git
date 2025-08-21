@@ -126,13 +126,12 @@ gck () {
 }
 
 alias gits='git status'
-alias gdev='gck develop'
 alias gstb='gck stable'
 alias gmas='gck master'
 alias gmain='gck main'
 
 alias gd='git branch -D'
-alias gdr='git push -D '
+alias gdr='git push -d '
 
 alias gf1='gck f1'
 alias gdf1='git branch -D f1'
@@ -142,7 +141,8 @@ alias grv='git remote -vv'
 
 alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 
-alias gmd='git merge develop'
+alias gmm='git merge main'
+alias gmf='git merge f1'
 
 gcom () {
     git add .
