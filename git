@@ -149,7 +149,7 @@ gcom () {
     git commit -a -m "$1"
 }
 
-gtest () {
+gtmp () {
     gcom "update on `date` "
 }
 

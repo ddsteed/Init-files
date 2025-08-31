@@ -149,7 +149,7 @@ brewapp () {
     
     #-   命令行
     apps=(aider aspell autoconf autojump automake bat blueutil brew-rmtree btop
-          cmake cowsay difftastic dify duf duti epr eza ffmpeg fortune
+          cmake coreutils cowsay difftastic dify duf duti epr eza ffmpeg fortune
           gcc git gpg hugo jj libtool macchina macmon mactop mas mongodb-community mysql ncdu ngrok ollama
           pandoc redis sleepwatcher sqlite tmux tree-sitter
           uv vim wget yazi youtubedr 
