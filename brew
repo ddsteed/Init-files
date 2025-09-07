@@ -114,6 +114,8 @@ brewreset () {
         ustc)
             git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
             echo 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"' >! ~/.zprofile
+            echo 'export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"' >> ~/.zprofile 
+            echo 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/bottles"' >> ~/.zprofile 
             ;;
         official | *)
             git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew
