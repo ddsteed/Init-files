@@ -135,7 +135,7 @@ alias gf1='gck f1'
 alias gdf1='git branch -D f1'
 
 alias glb='git branch -vv'
-alias grb='git remote -vv'
+alias grb='git branch -r -vv'
 
 alias gd='git branch -D'
 alias gdr='git push -d '
