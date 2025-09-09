@@ -129,15 +129,16 @@ alias gits='git status'
 alias gstb='gck stable'
 alias gmas='gck master'
 alias gmain='gck main'
-
-alias gd='git branch -D'
-alias gdr='git push -d '
+alias gdev='gck dev'
 
 alias gf1='gck f1'
 alias gdf1='git branch -D f1'
 
-alias gbv='git branch -vv'
-alias grv='git remote -vv'
+alias glb='git branch -vv'
+alias grb='git remote -vv'
+
+alias gd='git branch -D'
+alias gdr='git push -d '
 
 alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 
