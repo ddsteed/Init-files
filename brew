@@ -45,6 +45,8 @@ bin () {
     opt=
     if [[ $2 == "cask" || $2 == "c" ]]; then
         opt="--cask"
+    else
+        opt="--force-bottle"
     fi
 
     brew install $1 -v --force $opt
@@ -155,7 +157,7 @@ brewapp () {
           gcc git git-imerge gpg hugo jj libtool localai
           macchina macmon mactop mas mongodb-community mysql
           ncdu ngrok ollama pandoc redis sleepwatcher sqlite tmux tree-sitter
-          uv vim wget yazi youtubedr 
+          uv vim wget yazi youtubedr yt-dlp
          )
 
     #-   图形界面
@@ -198,7 +200,7 @@ brewapp () {
     echo "$#app apps $opt will be installed ... "
     echo "-----------------------------"
     echo 
-    brew $run $app --force $opt
+    brew $run $app --force -v $opt
 }
 
 #-------------------------------------------
