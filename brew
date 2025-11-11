@@ -152,12 +152,13 @@ brewapp () {
     brewtap
     
     #-   命令行
-    apps=(aider aspell autoconf autojump automake bat blueutil brew-rmtree btop
-          cmake coreutils cowsay difftastic dify duf duti epr eza ffmpeg fortune
-          gcc git git-imerge gpg hugo jj libtool localai
-          macchina macmon mactop mas mongodb-community mysql
-          ncdu ngrok ollama pandoc redis sleepwatcher sqlite tmux tree-sitter
-          uv vim wget yazi youtubedr yt-dlp
+    apps=(aider aspell autoconf autojump automake basedpyright bat blueutil brew-rmtree btop
+          cmake coreutils cowsay difftastic dify direnv duf duti
+          epr eza ffmpeg fortune gcc git git-imerge gpg hugo jj libtool localai
+          macchina macmon mactop mas mcp-toolbox mongodb-community mysql
+          ncdu ngrok ollama pandoc pyright redis ruff ruff-lsp
+          sass sleepwatcher sqlite
+          tmux tree-sitter uv vim wget yazi youtubedr yt-dlp
          )
 
     #-   图形界面
@@ -168,7 +169,7 @@ brewapp () {
           karabiner-elements lyricsx
           macdown mactex maczip mendeley-reference-manager miniforge
           namechanger neo4j-desktop netnewswire nimble-commander
-          obsidian ollama onyx orbstack rectangle shottr squirrel-app superwhisper
+          obsidian ollama onyx orbstack rectangle shottr squirrel-app 
           tencent-meeting thunder trae visual-studio-code wechat wechatwork wine-stable
           wljs-notebook wolfram-engine
          )
