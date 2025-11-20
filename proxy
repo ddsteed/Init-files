@@ -5,17 +5,17 @@ ip0='192.168.65.1'
 
 case $os in
     Darwin)
-        export https_proxy=127.0.0.1:7897
-        export http_proxy=127.0.0.1:7897
-    ;;
+        export https_proxy="http://127.0.0.1:7897"
+        export http_proxy="http://127.0.0.1:7897"
+        ;;
     Linux)
         if [ ! -n "$2" ] ;then
-           ip=$ip0
+            ip=$ip0
         else
-           ip=$2
+            ip=$2
         fi
         echo "proxy ip = $ip"
         export https_proxy=$ip:10001
         export http_proxy=$ip:10001
-    ;;
+        ;;
 esac

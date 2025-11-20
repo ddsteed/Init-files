@@ -37,7 +37,7 @@ brewup () {
     echo "upgrade all mac apps ... "
     echo "----------------------------"
 
-    /opt/homebrew/bin/mas upgrade
+#   /opt/homebrew/bin/mas upgrade
 }
 
 #- install app
@@ -153,17 +153,19 @@ brewapp () {
     
     #-   命令行
     apps=(aider aspell autoconf autojump automake basedpyright bat blueutil brew-rmtree btop
-          cmake coreutils cowsay difftastic dify direnv duf duti
+          claude-code-router cmake coreutils cowsay
+          difftastic dify direnv duf duti
           epr eza ffmpeg fortune gcc git git-imerge gpg hugo jj libtool localai
           macchina macmon mactop mas mcp-toolbox mongodb-community mysql
           ncdu ngrok ollama pandoc pyright redis ruff ruff-lsp
           sass sleepwatcher sqlite
-          tmux tree-sitter uv vim wget yazi youtubedr yt-dlp
+          tmux tree-sitter uv wget yazi youtubedr yt-dlp
          )
 
     #-   图形界面
     appc=(alfred appcleaner arc baidunetdisk bean betterdisplay
-          calibre cherry-studio clash-verge-rev cursor docker-desktop drawio
+          calibre cherry-studio clash-verge-rev claude-code cursor
+          docker-desktop drawio
           easydict eclipse-ide emacs-app feishu fork gimp google-chrome
           hammerspoon handbrake-app hiddenbar homerow iina iterm2
           karabiner-elements lyricsx
