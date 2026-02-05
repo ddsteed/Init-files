@@ -31,7 +31,7 @@ brewup () {
     echo "upgrade all cask apps ... "
     echo "----------------------------"
 
-    brew cu -a -f -y 
+    brew upgrade --cask --greedy
 
     echo
     echo "upgrade all mac apps ... "
@@ -130,8 +130,9 @@ brewreset () {
 #---
 #- brew 安装常用的软件
 # 添加第三方库
+
 brewtap () {
-    taps=(buo/cask-upgrade langgenius/dify beeftornado/rmtree mongodb/brew)
+    taps=(langgenius/dify beeftornado/rmtree mongodb/brew felixkratz/formulae)
 
     case $1 in
         u)
@@ -145,65 +146,66 @@ brewtap () {
     for ap in $taps; do
         brew $run $ap
     done
-}
+ }
 
-brewapp () {
-    #-   先准备第三方库
-    brewtap
-    
-    #-   命令行
-    apps=(aider aspell autoconf autojump automake basedpyright bat blueutil brew-rmtree btop
-          claude-code-router cmake coreutils cowsay
-          difftastic dify direnv duf duti
-          epr eza ffmpeg fortune gcc git git-imerge gpg hugo jj libtool localai
-          macchina macmon mactop mas mcp-toolbox mongodb-community mysql
-          ncdu ngrok ollama pandoc pyright redis ruff ruff-lsp
-          sass sleepwatcher sqlite
-          tmux tree-sitter uv wget yazi youtubedr yt-dlp
-         )
+ brewapp () {
+     #-   先准备第三方库
+     brewtap
+     
+     #-   命令行
+     apps=(aider aspell autoconf autojump automake basedpyright bat blueutil brew-rmtree btop
+           claude-code-router clawdbot cmake coreutils cowsay
+           difftastic dify direnv duf duti
+           epr eza ffmpeg fortune fzf gcc gemini-cli git git-imerge gpg hugo jj libtool localai
+           macchina macism macmon mactop mas mcp-toolbox mermaid-cli mongodb-community mysql
+           ncdu ngrok ollama ocrmypdf pandoc pyright redis ruff ruff-lsp
+           sass sketchybar sleepwatcher sqlite
+           tmux tree tree-sitter uv wget yazi youtubedr yt-dlp
+           zoxide
+          )
 
-    #-   图形界面
-    appc=(alfred appcleaner arc baidunetdisk bean betterdisplay
-          calibre cherry-studio clash-verge-rev claude-code cursor
-          docker-desktop drawio
-          easydict eclipse-ide emacs-app feishu fork gimp google-chrome
-          hammerspoon handbrake-app hiddenbar homerow iina iterm2
-          karabiner-elements lyricsx
-          macdown mactex maczip mendeley-reference-manager miniforge
-          namechanger neo4j-desktop netnewswire nimble-commander
-          obsidian ollama onyx orbstack rectangle shottr squirrel-app 
-          tencent-meeting thunder trae visual-studio-code wechat wechatwork wine-stable
-          wljs-notebook wolfram-engine
-         )
+     #-   图形界面
+     appc=(aerospace alfred appcleaner arc baidunetdisk bean betterdisplay
+           calibre cherry-studio clash-verge-rev claude-code cursor cursorcerer
+           docker-desktop drawio
+           easydict eclipse-ide emacs feishu fork gimp google-chrome
+           hammerspoon handbrake-app hiddenbar homerow iina iterm2
+           karabiner-elements langflow lyricsx
+           macdown mactex maczip mendeley-reference-manager miniforge
+           namechanger neo4j-desktop netnewswire nimble-commander
+           obsidian ollama onyx opencode-desktop orbstack rectangle shottr squirrel-app 
+           tencent-meeting thunder trae visual-studio-code wechat wechatwork wine-stable
+           wljs-notebook wolfram-engine
+          )
 
-    case $1 in
-        c)
-            app=($appc)
-            run="install"
-            opt="--cask"
-            ;;
-        rc)
-            app=($appc)
-            run="reinstall"
-            opt="--cask"
-            ;;
-        r)
-            app=($apps)
-            run="reinstall"
-            opt=
-            ;;
-        *)
-            app=($apps)
-            run="install"
-            opt=
-            ;;
-    esac 
+     case $1 in
+         c)
+             app=($appc)
+             run="install"
+             opt="--cask"
+             ;;
+         rc)
+             app=($appc)
+             run="reinstall"
+             opt="--cask"
+             ;;
+         r)
+             app=($apps)
+             run="reinstall"
+             opt=
+             ;;
+         *)
+             app=($apps)
+             run="install"
+             opt=
+             ;;
+     esac 
 
-    echo 
-    echo "$#app apps $opt will be installed ... "
-    echo "-----------------------------"
-    echo 
-    brew $run $app --force -v $opt
-}
+     echo 
+     echo "$#app apps $opt will be installed ... "
+     echo "-----------------------------"
+     echo 
+     brew $run $app --force -v $opt
+ }
 
-#-------------------------------------------
+ #-------------------------------------------
