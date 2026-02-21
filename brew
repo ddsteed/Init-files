@@ -132,7 +132,7 @@ brewreset () {
 # 添加第三方库
 
 brewtap () {
-    taps=(langgenius/dify beeftornado/rmtree mongodb/brew felixkratz/formulae)
+    taps=(langgenius/dify beeftornado/rmtree mongodb/brew felixkratz/formulae jsattler/tap)
 
     case $1 in
         u)
@@ -153,29 +153,49 @@ brewtap () {
      brewtap
      
      #-   命令行
-     apps=(aider aspell autoconf autojump automake basedpyright bat blueutil brew-rmtree btop
+     apps=(aider aspell autoconf autojump automake
+           basedpyright bat blueutil brew-rmtree btop
            claude-code-router clawdbot cmake coreutils cowsay
            difftastic dify direnv duf duti
-           epr eza ffmpeg fortune fzf gcc gemini-cli git git-imerge gpg hugo jj libtool localai
+           epr eza
+           ffmpeg fortune fzf
+           gcc gemini-cli git git-imerge gpg
+           hugo
+           jj
+           libtool localai
            macchina macism macmon mactop mas mcp-toolbox mermaid-cli mongodb-community mysql
-           ncdu ngrok ollama ocrmypdf pandoc pyright redis ruff ruff-lsp
+           ncdu ngrok
+           ollama ocrmypdf
+           pandoc pyright
+           redis ruff ruff-lsp
            sass sketchybar sleepwatcher sqlite
-           tmux tree tree-sitter uv wget yazi youtubedr yt-dlp
+           tmux tree tree-sitter
+           uv
+           wget
+           yazi youtubedr yt-dlp
            zoxide
           )
 
      #-   图形界面
-     appc=(aerospace alfred appcleaner arc baidunetdisk bean betterdisplay
+     appc=(aerospace alfred appcleaner arc
+           baidunetdisk bean bettercapture betterdisplay
            calibre cherry-studio clash-verge-rev claude-code cursor cursorcerer
            docker-desktop drawio
-           easydict eclipse-ide emacs feishu fork gimp google-chrome
-           hammerspoon handbrake-app hiddenbar homerow iina iterm2
-           karabiner-elements langflow lyricsx
+           easydict eclipse-ide emacs
+           feishu fork
+           gimp google-chrome
+           hammerspoon handbrake-app hiddenbar homerow
+           iina iterm2
+           karabiner-elements
+           langflow lyricsx
            macdown mactex maczip mendeley-reference-manager miniforge
            namechanger neo4j-desktop netnewswire nimble-commander
-           obsidian ollama onyx opencode-desktop orbstack rectangle shottr squirrel-app 
-           tencent-meeting thunder trae visual-studio-code wechat wechatwork wine-stable
-           wljs-notebook wolfram-engine
+           obsidian ollama onyx opencode-desktop orbstack
+           rectangle
+           shottr squirrel-app 
+           tencent-meeting thunder trae
+           visual-studio-code
+           wechat wechatwork wine-stable wljs-notebook wolfram-engine
           )
 
      case $1 in
