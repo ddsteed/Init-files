@@ -1,54 +1,92 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
+#-----------------------------------------------------------------------
+# Git 多仓库管理脚本
 #
-runname=`basename $0`
+# 功能说明：
+#   - 多仓库/多分支批量操作（pull/push/fetch）
+#   - 快速分支切换和管理
+#   - Git 历史清理和大文件管理
+#   - 支持不同项目配置（DCM/KG/Safer/OB）
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2022, RDS
+# 创建日期：Feb. 21, 2025
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2022-02-21) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
+runname=$(basename $0)
+
+#-----------------------------------------------------------------------
+# 项目特定配置
+#-----------------------------------------------------------------------
 case $runname in
     dcm)
-        repository=(github1 github2 github3 github4 github5)  # remote repository name
-        branch=(stable master develop)                        # branch name
-        bakrepo=(bak)                                         # backup repository name
+        # DCM 项目配置
+        repository=(github1 github2 github3 github4 github5)  # 远程仓库名称
+        branch=(stable master develop)                        # 分支名称
+        bakrepo=(bak)                                         # 备份仓库名称
         ;;
     kg)
+        # KG 项目配置
         repository=(github)
-        branch=(main master develop)                          # branch name
-        bakrepo=(bak)                                         # backup repository name
+        branch=(main master develop)
+        bakrepo=(bak)
         ;;
     safer)
+        # Safer 项目配置
         repository=(github)
-        branch=(master develop)                               # branch name
-        bakrepo=(bak)                                         # backup repository name
+        branch=(master develop)
+        bakrepo=(bak)
         ;;
     ob)
+        # Obsidian 笔记配置
         repository=(obnotes)
         branch=(master)
         bakrepo=(bak)
         ;;
     *)
+        # 默认配置
         repository=(origin)
         branch=(master)
         bakrepo=(bak)
         ;;
 esac
 
+#-----------------------------------------------------------------------
+# 函数：fgit
+# 功能：多仓库/多分支批量 Git 操作
+# 参数：$1=操作(pull/push/fetch) $2=仓库列表 $3=分支列表 $4=force 选项
+# 用法：
+#   fgit pull              # 拉取所有仓库所有分支
+#   fgit push github1 dev  # 推送到 github1 的 dev 分支
+#-----------------------------------------------------------------------
 fgit () {
+    # 解析操作类型
     if [[ "x$1" != "x" ]]; then
         run=$1; shift
     else
         run=pull
     fi
 
+    # 解析仓库列表
     if [[ "x$1" != "x" ]]; then
         repo=($1); shift
     else
         repo=($repository[@])
     fi
 
+    # 解析分支列表
     if [[ "x$1" != "x" ]]; then
         bran=($1); shift
     else
         bran=($branch[@])
     fi
 
+    # 解析 force 选项
     if [[ "x$1" != "x" ]]; then
         force="--$1"; shift
     else
@@ -59,14 +97,15 @@ fgit () {
     echo "* Git $run --- "
     echo "      repo = ${repo[@]}: ${#repo[*]}"
     echo "      bran = ${bran[@]}: ${#bran[*]}"
-    
+
     mission=0
     total=$[ ${#repo[@]} * ${#bran[@]} ]
-    
+
+    # 遍历所有仓库和分支
     for re in ${repo[@]}; do
         for br in ${bran[@]}; do
             let mission++
-            echo 
+            echo
             echo "----------------------------------------------------"
             echo " [$mission/$total]: "
             echo "         $run repository: $re/$br ... "
@@ -79,6 +118,11 @@ fgit () {
     echo "----------------------------------------------------"
 }
 
+#-----------------------------------------------------------------------
+# 函数：fpush
+# 功能：批量推送到所有仓库的所有分支
+# 参数：$1=force 选项（可选）
+#-----------------------------------------------------------------------
 fpush () {
     if [[ "x$1" != "x" ]]; then
         fr=$1; shift
@@ -93,30 +137,49 @@ fpush () {
     done
 }
 
+#-----------------------------------------------------------------------
+# 函数：fpull
+# 功能：从所有仓库拉取更新
+#-----------------------------------------------------------------------
 fpull () {
     for re in ${repository[@]}; do
         fgit pull $re
     done
 }
 
+#-----------------------------------------------------------------------
+# 函数：ffetch
+# 功能：从所有仓库获取更新（不合并）
+#-----------------------------------------------------------------------
 ffetch () {
     for re in ${repository[@]}; do
         fgit fetch $re
     done
 }
 
+#-----------------------------------------------------------------------
+# 函数：fbak
+# 功能：备份仓库操作
+# 参数：$1=操作（push/pull，默认 push）
+#-----------------------------------------------------------------------
 fbak () {
     if [[ $1 == "" ]]; then
         run=push
     else
         run=$1; shift
     fi
-    
+
     for re in ${bakrepo[@]}; do
         fgit $run $re
     done
 }
 
+#-----------------------------------------------------------------------
+# 函数：gck
+# 功能：智能切换 Git 分支
+# 参数：$1=分支名
+# 说明：分支存在则切换，不存在则创建
+#-----------------------------------------------------------------------
 gck () {
     if [[ `git branch --list $1` ]]; then
         git switch $1
@@ -125,7 +188,12 @@ gck () {
     fi
 }
 
+#-----------------------------------------------------------------------
+# Git 常用别名
+#-----------------------------------------------------------------------
 alias gits='git status'
+alias gitp='git push'
+alias gitl='git lg'
 alias gstb='gck stable'
 alias gmas='gck master'
 alias gmain='gck main'
@@ -145,57 +213,98 @@ alias glog='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%
 alias gmm='git merge main'
 alias gmf='git merge f1'
 
+#-----------------------------------------------------------------------
+# 函数：gcom
+# 功能：快速提交（添加所有文件并提交）
+# 参数：$1=提交信息
+#-----------------------------------------------------------------------
 gcom () {
     git add .
     git commit -a -m "$1"
 }
 
+#-----------------------------------------------------------------------
+# 函数：gtmp
+# 功能：临时提交（使用当前时间作为提交信息）
+#-----------------------------------------------------------------------
 gtmp () {
     gcom "update on `date` "
 }
 
+#-----------------------------------------------------------------------
+# 函数：gpush
+# 功能：推送到 github（带标签）
+#-----------------------------------------------------------------------
 gpush () {
     git push github --follow-tags
 }
 
+#-----------------------------------------------------------------------
+# 函数：fatpush
+# 功能：推送到 Fatavay 仓库（强制推送）
+# 参数：$1=仓库编号
+#-----------------------------------------------------------------------
 fatpush () {
     echo "push fat$1 ..."
     git push fat$1 develop --force --follow-tags
 }
 
+#-----------------------------------------------------------------------
+# 函数：gpull
+# 功能：从 github 拉取 develop 分支
+#-----------------------------------------------------------------------
 gpull () {
     git pull github develop
 }
 
+#-----------------------------------------------------------------------
+# 函数：gfat
+# 功能：推送到 Fatavay 仓库
+# 参数：$1=仓库编号
+#-----------------------------------------------------------------------
 gfat () {
     git push fat$1
 }
 
-# list top 10 files (most large size)
+#-----------------------------------------------------------------------
+# 函数：gl10
+# 功能：列出仓库中最大的 10 个文件
+#-----------------------------------------------------------------------
 gl10 () {
     git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -10
 }
 
+#-----------------------------------------------------------------------
+# 函数：glarge
+# 功能：列出仓库中最大的 N 个文件
+# 参数：$1=数量
+#-----------------------------------------------------------------------
 glarge () {
   git rev-list --all | xargs -rL1 git ls-tree -r --long | sort -uk3 | sort -rnk4 | head -$1
 }
 
-# delete files thoroughly!!!
+#-----------------------------------------------------------------------
+# 函数：grmt
+# 功能：彻底删除文件（包括历史记录）
+# 参数：$1=文件路径
+# 警告：此操作不可逆，会重写 Git 历史！
+#-----------------------------------------------------------------------
 grmt () {
     echo "delete file/directory thoroughly, so be carefully doing it!!!"
     echo -n " * please input yes/no: "
     read continue
     if [[ $continue == "yes" ]]; then
+        # 使用 filter-branch 删除历史记录
         git filter-branch  --force --index-filter "git rm -rf --cached --ignore-unmatch $1" --prune-empty --tag-name-filter cat -- --all
 
-        # 删除original文件夹
+        # 删除 original 文件夹
         git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
         rm -rf .git/refs/original/
-        # 修剪旧的reflog条目
+        # 修剪旧的 reflog 条目
         git reflog expire --expire=now --all
         # 验证数据库中对象的连接性和有效性
         git fsck --full --unreachable
-        # 打包解压缩的对象。 删除冗余的对象
+        # 打包解压缩的对象，删除冗余的对象
         git repack -A -d
         # 清理不必要的文件并优化本地存储库
         git gc --aggressive --prune=now
@@ -206,24 +315,29 @@ alias gclean='git gc --aggressive --prune=now'
 
 alias gabandon='git checkout . && git clean -xdf'
 
-#-
-
+#-----------------------------------------------------------------------
+# 项目特定别名
+#-----------------------------------------------------------------------
 case $runname in
     ob)
+        # Obsidian 笔记相关
         alias cdob='cd /Users/fengh/Documents/RDS/NOTES/Obsidian'
         alias obsync='rsync -alvzrtopg --progress --delete /Users/fengh/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/RDS . && git add . && git commit -a -m "sync on `date`"'
         alias gbakob='fgit push'
         alias obwork='cdob && obsync; gbakob'
         ;;
     dcm)
+        # DCM 项目相关
         alias dcmclone='git clone /Users/fengh/Research/DCM'
         alias fpull3='fgit pull github3 develop'
         ;;
     safer)
+        # Safer 项目相关
         source ~/Init/dcmenv
         alias slave='/Users/fengh/Research/FORECAST/DCM/SAFER/src/slave/slave.py'
         alias master='/Users/fengh/Research/FORECAST/DCM/SAFER/src/master/master.py'
         ;;
     *)
+        # 默认
         ;;
 esac

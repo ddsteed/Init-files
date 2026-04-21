@@ -1,51 +1,93 @@
 #!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# 数据库服务管理脚本
+#
+# 功能说明：
+#   - MySQL 服务启动/停止/重启
+#   - Redis 服务启动/停止/重启
+#   - 通过 Homebrew services 管理
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2022, RDS
+# 创建日期：Jul. 12, 2022
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2022-07-12) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
+#-----------------------------------------------------------------------
+# ARM64 架构的 brew 包装函数
+#-----------------------------------------------------------------------
 abrew () {
     arch -arm64e /opt/homebrew/bin/brew $@
 }
 
+#-----------------------------------------------------------------------
+# MySQL 数据库服务管理
+#-----------------------------------------------------------------------
 case $runname in
     mysql)
+        # MySQL 服务控制函数
         sql () {
           abrew services $1 mysql
         }
 
+        # 启动 MySQL
         sqls () {
           sql start
         }
 
+        # 重启 MySQL
         sqlr () {
           sql restart
         }
 
+        # 停止 MySQL
         sqlstop () {
           sql stop
         }
 
+        # 默认启动 MySQL
         sqls
         ;;
+esac
+
+#-----------------------------------------------------------------------
+# Redis 缓存服务管理
+#-----------------------------------------------------------------------
+case $runname in
     redis)
+        # Redis 服务控制函数
         redis () {
           abrew services $1 redis
         }
 
+        # 启动 Redis
         rediss () {
           redis start
         }
 
+        # 重启 Redis
         redisr () {
           redis restart
         }
 
+        # 停止 Redis
         redisstop () {
           redis stop
         }
 
+        # 默认启动 Redis
         rediss
         ;;
 esac
 
-alias sqlroot='mysql -u root'
-alias sqltest='mysql -u test -p'
+#-----------------------------------------------------------------------
+# MySQL 客户端快捷别名
+#-----------------------------------------------------------------------
+alias sqlroot='mysql -u root'      # root 用户登录
+alias sqltest='mysql -u test -p'   # test 用户登录

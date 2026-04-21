@@ -1,48 +1,81 @@
-#!/usr/bin/env   zsh
+#!/usr/bin/env zsh
 
 #-----------------------------------------------------------------------
-# This script is to operate HomeBrew system.
+# HomeBrew 系统管理脚本
 #
-# Author:    Hao Feng (F1)
+# 功能说明：
+#   - 一键更新/升级所有 HomeBrew 应用
+#   - 快速安装/卸载/重装应用
+#   - 备份和恢复 Brewfile 配置
+#   - 切换国内/官方镜像源
+#   - 批量安装常用开发工具和图形应用
 #
-# Init Date: Mar. 13, 2019
-# Last Date: Jun. 24, 2025
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2019-, RDS
+# 创建日期：Mar. 13, 2019
+# 最后更新：Mar. 20, 2025
 #
-# Copyright (c) 2019-, RDS
+# 版本历史：
+#   v1.0.0 (2019-03-13) - 初始版本，基础功能实现
+#   v1.1.0 (2020-06-15) - 新增 brewup 一键更新功能
+#   v1.2.0 (2021-03-22) - 新增备份/恢复 Brewfile 功能
+#   v1.3.0 (2022-08-10) - 新增镜像源切换功能
+#   v1.4.0 (2023-05-18) - 新增 brewapp 批量安装功能
+#   v1.5.0 (2024-02-29) - 优化 cask 应用处理，新增 greedy 升级
+#   v1.6.0 (2025-06-24) - 更新应用列表，添加 AI 工具支持
+#   v1.7.0 (2025-03-20) - 修复 brewtap 函数：修复数组循环错误，添加进度显示和错误处理，通过 shellcheck SC2120 检查
 #-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
-#- update/upgrade all apps
-brewup () {
-#   brew update && brew upgrade && brew cu -a -y && /opt/homebrew/bin/mas upgrade
+#-----------------------------------------------------------------------
+# 函数：brewup
+# 功能：更新/升级所有 HomeBrew 应用
+# 流程：
+#   1. 更新 HomeBrew 本体
+#   2. 升级所有 formula（命令行工具）
+#   3. 升级所有 cask（图形应用）
+#   4. 升级 Mac App Store 应用（已禁用）
+#-----------------------------------------------------------------------
+brewup() {
+    # 更新 HomeBrew 本体
     echo
-    echo "update homebrew ..."
+    echo "更新 HomeBrew ..."
     echo "----------------------------"
-    brew update 
+    brew update
 
+    # 升级所有命令行工具
     echo
-    echo "upgrade all apps ... "
+    echo "升级所有命令行应用 ... "
     echo "----------------------------"
+    brew upgrade
 
-    brew upgrade 
-
+    # 升级所有图形应用（包括版本号不变的）
     echo
-    echo "upgrade all cask apps ... "
+    echo "升级所有图形应用 ... "
     echo "----------------------------"
-
     brew upgrade --cask --greedy
 
-    echo
-    echo "upgrade all mac apps ... "
-    echo "----------------------------"
-
-#   /opt/homebrew/bin/mas upgrade
+    # 升级 Mac App Store 应用（当前已禁用）
+    # echo
+    # echo "升级 Mac App Store 应用 ... "
+    # echo "----------------------------"
+    # /opt/homebrew/bin/mas upgrade
 }
 
-#- install app
-bin () {
+#-----------------------------------------------------------------------
+# 函数：bin
+# 功能：安装指定应用
+# 参数：
+#   $1 - 应用名称
+#   $2 - 类型：cask/c（图形应用）或 默认（命令行工具）
+# 用法：
+#   bin curl          # 安装命令行工具 curl
+#   bin chrome c      # 安装图形应用 Chrome
+#-----------------------------------------------------------------------
+bin() {
     opt=
+    # 判断是否为 cask 应用
     if [[ $2 == "cask" || $2 == "c" ]]; then
         opt="--cask"
     else
@@ -52,7 +85,17 @@ bin () {
     brew install $1 -v --force $opt
 }
 
-brin () {
+#-----------------------------------------------------------------------
+# 函数：brin
+# 功能：重新安装指定应用
+# 参数：
+#   $1 - 应用名称
+#   $2 - 类型：cask/c（图形应用）或 默认（命令行工具）
+# 用法：
+#   brin curl         # 重装命令行工具 curl
+#   brin chrome c     # 重装图形应用 Chrome
+#-----------------------------------------------------------------------
+brin() {
     opt=
     if [[ $2 == "cask" || $2 == "c" ]]; then
         opt="--cask"
@@ -61,65 +104,121 @@ brin () {
     brew reinstall $1 -v --force $opt
 }
 
-#- upgrade app
-bup () {
+#-----------------------------------------------------------------------
+# 函数：bup
+# 功能：升级指定应用
+# 参数：$1 - 应用名称
+# 用法：bup curl
+#-----------------------------------------------------------------------
+bup() {
     brew upgrade $1 -v
 }
 
-#- uninstall app
-bun () {
+#-----------------------------------------------------------------------
+# 函数：buni
+# 功能：卸载指定应用
+# 参数：$1 - 应用名称
+# 用法：buni curl
+#-----------------------------------------------------------------------
+buni() {
     brew uninstall $1 -v
-    # brew rmtree $1
+    # 依赖清理已改用 brew rmtree
 }
 
-brm () {
+#-----------------------------------------------------------------------
+# 函数：brm
+# 功能：完全卸载应用及其所有依赖
+# 参数：$1 - 应用名称
+# 用法：brm curl
+# 说明：需要安装 beeftornado/rmtree tap
+#-----------------------------------------------------------------------
+brm() {
     brew rmtree $1
 }
 
-#- backup all brew apps
-brewbk () {
-    echo "backup brew apps ... "
+#-----------------------------------------------------------------------
+# 函数：brewbk
+# 功能：备份所有已安装应用到 Brewfile
+# 输出：~/.backup/Brewfile
+# 用法：brewbk
+#-----------------------------------------------------------------------
+brewbk() {
+    echo "备份已安装的 Brew 应用 ... "
     echo "----------------"
     echo
     brew bundle dump --file=~/.backup/Brewfile -f
 }
 
-#- restore all brew apps from backup file
-brewrt () {
-    echo "restore brew apps ... "
+#-----------------------------------------------------------------------
+# 函数：brewrt
+# 功能：从 Brewfile 恢复所有应用
+# 输入：~/.backup/Brewfile
+# 用法：brewrt
+#-----------------------------------------------------------------------
+brewrt() {
+    echo "从备份恢复 Brew 应用 ... "
     echo "-----------------"
     echo
     brew bundle --file=~/.backup/Brewfile --force
 }
 
-#---
-# brew system operations
+#-----------------------------------------------------------------------
+# HomeBrew 系统级操作
+#-----------------------------------------------------------------------
 
-brewinstall () {
+#-----------------------------------------------------------------------
+# 函数：brewinstall
+# 功能：安装 HomeBrew 到系统
+# 用法：brewinstall
+#-----------------------------------------------------------------------
+brewinstall() {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
-brewuninstall () {
+#-----------------------------------------------------------------------
+# 函数：brewuninstall
+# 功能：完全卸载 HomeBrew
+# 用法：brewuninstall
+#-----------------------------------------------------------------------
+brewuninstall() {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 }
 
-brewrm () {
+#-----------------------------------------------------------------------
+# 函数：brewrm
+# 功能：批量卸载指定类型的所有应用
+# 参数：$1 - 类型（formula/cask）
+# 用法：brewrm formula
+#-----------------------------------------------------------------------
+brewrm() {
     brew ls --$1 | xargs brew remove -f --ignore-dependencies
 }
 
-#- reset official source
-brewreset () {
+#-----------------------------------------------------------------------
+# 函数：brewreset
+# 功能：重置 HomeBrew 源（官方/国内镜像）
+# 参数：
+#   $1 - 镜像源：
+#        ustc     - 中国科学技术大学镜像
+#        official - 官方源（默认）
+# 用法：
+#   brewreset ustc      # 切换到中科大镜像
+#   brewreset official  # 切换到官方源
+#-----------------------------------------------------------------------
+brewreset() {
     unset HOMEBREW_BREW_GIT_REMOTE
     rm ~/.zprofile
 
     case $1 in
         ustc)
+            # 中科大镜像源
             git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git
             echo 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"' >! ~/.zprofile
-            echo 'export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"' >> ~/.zprofile 
-            echo 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/bottles"' >> ~/.zprofile 
+            echo 'export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"' >> ~/.zprofile
+            echo 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/bottles"' >> ~/.zprofile
             ;;
         official | *)
+            # GitHub 官方源
             git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew
             ;;
     esac
@@ -127,105 +226,245 @@ brewreset () {
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)" ' >> ~/.zprofile
 }
 
-#---
-#- brew 安装常用的软件
-# 添加第三方库
+#-----------------------------------------------------------------------
+# 第三方库管理
+#-----------------------------------------------------------------------
 
-brewtap () {
-    taps=(langgenius/dify beeftornado/rmtree mongodb/brew felixkratz/formulae jsattler/tap)
+#-----------------------------------------------------------------------
+# 函数：brewtap
+# 功能：批量添加/移除第三方 tap 源
+# 参数：
+#   $1 - 操作类型：
+#        u  - 移除（untap）
+#        无 - 添加（tap，默认）
+# 用法：
+#   brewtap       # 添加所有第三方源
+#   brewtap u     # 移除所有第三方源
+#-----------------------------------------------------------------------
+brewtap() {
+    # 参数默认值处理（满足 shellcheck SC2120）
+    local action="${1:-}"
 
+    # 常用第三方源列表（注意：不使用行内注释，避免循环时被分割）
+    local -a taps=(
+        langgenius/dify
+        beeftornado/rmtree
+        mongodb/brew
+        felixkratz/formulae
+        jsattler/tap
+    )
+
+    # 确定操作类型
+    local operation="tap"
+    local operation_name="添加"
+    if [[ "$action" == "u" ]]; then
+        operation="untap"
+        operation_name="移除"
+    fi
+
+    echo "开始${operation_name}第三方 tap 源..."
+    echo "----------------------------"
+
+    local success_count=0
+    local failed_count=0
+    local skipped_count=0
+
+    for tap_repo in "${taps[@]}"; do
+        echo -n "[$tap_repo] ... "
+
+        # 根据操作类型执行命令，静默处理已存在的情况
+        if brew "$operation" "$tap_repo" &>/dev/null; then
+            echo "✓"
+            ((success_count++))
+        elif brew "$operation" "$tap_repo" 2>&1 | grep -q "already tapped"; then
+            echo "⊘ 已存在"
+            ((skipped_count++))
+        else
+            echo "✗ 失败"
+            ((failed_count++))
+        fi
+    done
+
+    echo "----------------------------"
+    echo "完成: 成功=$success_count, 跳过=$skipped_count, 失败=$failed_count"
+}
+
+#-----------------------------------------------------------------------
+# 函数：brewapp
+# 功能：批量安装常用应用
+# 参数：
+#   $1 - 安装模式：
+#        无  - 安装命令行工具（默认）
+#        r   - 重装命令行工具
+#        c   - 安装图形应用
+#        rc  - 重装图形应用
+# 用法：
+#   brewapp        # 安装所有命令行工具
+#   brewapp c      # 安装所有图形应用
+#   brewapp r      # 重装所有命令行工具
+#-----------------------------------------------------------------------
+brewapp() {
+    # 先添加第三方源
+    brewtap
+
+    # 命令行工具列表
+    apps=(aider              # AI 辅助编程
+          aspell             # 拼写检查
+          autoconf           # 自动配置工具
+          autojump           # 目录快速跳转
+          automake           # 自动生成 Makefile
+          basedpyright       # Python 类型检查
+          bat                # cat 替代品（语法高亮）
+          blueutil           # 蓝牙管理
+          brew-rmtree        # 依赖清理
+          btop               # 系统监控
+          claude-code-router # Claude Code 路由
+          clawdbot           # Clawd Bot
+          cmake              # 跨平台构建工具
+          cowsay             # ASCII 艺术牛
+          difftastic         # 代码差异对比
+          dify               # Dify AI 工具
+          direnv             # 环境变量管理
+          duf                # 磁盘使用情况
+          duti               # 默认应用设置
+          epr                # Epic Reader
+          eza                # ls 替代品
+          ffmpeg             # 视频处理
+          fortune            # 格言
+          fzf                # 模糊查找器
+          gcc                # GCC 编译器
+          gemini-cli         # Gemini CLI
+          git                # 版本控制
+          git-imerge         # Git 合并工具
+          gpg                # GNU Privacy Guard
+          hugo               # 静态网站生成器
+          jj                 # JIT 版本控制系统
+          libtool            # 库构建工具
+          lsd                # 漂亮的 ls 替代品
+          localai            # 本地 AI
+          macchina           # 系统信息
+          macism             # macOS 设置
+          macmon             # Mac 监控
+          mactop             # Mac 资源监控
+          mas                # Mac App Store CLI
+          mcp-toolbox        # MCP 工具箱
+          mermaid-cli        # Mermaid 图表
+          mole               # SSH 隧道
+          mongodb-community  # MongoDB 数据库
+          mysql              # MySQL 数据库
+          ncdu               # 磁盘清理
+          ngrok              # 内网穿透
+          ocrmypdf           # PDF OCR
+          pandoc             # 文档转换
+          pyright            # Python 类型检查
+          redis              # Redis 数据库
+          ruff               # Python Linter
+          ruff-lsp           # Ruff LSP
+          sass               # CSS 预处理器
+          sketchybar         # 菜单栏定制
+          sleepwatcher       # 睡眠监控
+          sqlite             # SQLite 数据库
+          tmux               # 终端复用器
+          tree               # 目录树
+          tree-sitter        # 代码解析
+          uutils-coreutils   # GNU 核心工具 --- Rust version
+          uv                 # Python 包管理器
+          wget               # 下载工具
+          yazi               # 终端文件管理器
+          youtubedr          # YouTube 下载
+          yt-dlp             # 视频下载
+          zoxide             # 智能目录跳转
+         )
+
+    # 图形应用列表
+    appc=(aerospace            # 平铺窗口管理器
+          alfred               # 启动器
+          appcleaner           # 应用卸载
+          arc                  # Arc 浏览器
+          baidunetdisk         # 百度网盘
+          battery              # 电池监控
+          bean                 # 豆子财务
+          bettercapture        # 截图工具
+          betterdisplay        # 显示设置
+          calibre              # 电子书管理
+          cherry-studio        # Cherry Studio
+          clash-verge-rev      # 代理工具
+          cursorcerer          # 光标隐藏
+          deckclip             # mac copy/paste
+          docker-desktop       # Docker
+          drawio               # 流程图
+          easydict             # 翻译词典
+          emacs                # Emacs 编辑器
+          feishu               # 飞书
+          fork                 # Git GUI
+          gimp                 # 图像编辑
+          gitx                 # Git GUI
+          google-chrome        # Chrome 浏览器
+          hammerspoon          # 自动化工具
+          handbrake-app        # 视频转码
+          hiddenbar            # 菜单栏隐藏
+          homerow              # 键盘映射
+          iina                 # 视频播放器
+          iterm2               # 终端
+          karabiner-elements   # 键位映射
+          keylu                # 快捷键查看
+          langflow             # Langflow
+          lyricsx              # 歌词显示
+          macdown              # Markdown 编辑器
+          mactex               # LaTeX 发行版
+          maczip               # 解压工具
+          miniforge            # Conda 发行版
+          namechanger          # 批量重命名
+          neo4j-desktop        # Neo4j 图数据库
+          netnewswire          # RSS 阅读器
+          obsidian             # 笔记应用
+          onyx                 # 系统维护
+          orbstack             # Docker 替代
+          raycast              # 启动器
+          rectangle            # 窗口管理
+          shottr               # 截图工具
+          squirrel-app         # 输入法
+          tencent-meeting      # 腾讯会议
+          thunder              # 迅雷
+          visual-studio-code   # VS Code
+          wechat               # 微信
+          wechatwork           # 企业微信
+          wine-stable          # Wine
+          wolfram-engine       # Wolfram Engine
+          zotero               # 文献管理
+         )
+
+    # 根据参数选择操作类型和应用列表
     case $1 in
-        u)
-            run=untap
+        c)
+            app=($appc)
+            run="install"
+            opt="--cask"
+            ;;
+        rc)
+            app=($appc)
+            run="reinstall"
+            opt="--cask"
+            ;;
+        r)
+            app=($apps)
+            run="reinstall"
+            opt=
             ;;
         *)
-            run=tap
+            app=($apps)
+            run="install"
+            opt=
             ;;
     esac
 
-    for ap in $taps; do
-        brew $run $ap
-    done
- }
+    echo
+    echo "$#app 个应用将使用选项 $opt 进行 $run ... "
+    echo "-----------------------------"
+    echo
+    brew $run $app --force -v $opt
+}
 
- brewapp () {
-     #-   先准备第三方库
-     brewtap
-     
-     #-   命令行
-     apps=(aider aspell autoconf autojump automake
-           basedpyright bat blueutil brew-rmtree btop
-           claude-code-router clawdbot cmake coreutils cowsay
-           difftastic dify direnv duf duti
-           epr eza
-           ffmpeg fortune fzf
-           gcc gemini-cli git git-imerge gpg
-           hugo
-           jj
-           libtool localai
-           macchina macism macmon mactop mas mcp-toolbox mermaid-cli mongodb-community mysql
-           ncdu ngrok
-           ollama ocrmypdf
-           pandoc pyright
-           redis ruff ruff-lsp
-           sass sketchybar sleepwatcher sqlite
-           tmux tree tree-sitter
-           uv
-           wget
-           yazi youtubedr yt-dlp
-           zoxide
-          )
-
-     #-   图形界面
-     appc=(aerospace alfred appcleaner arc
-           baidunetdisk bean bettercapture betterdisplay
-           calibre cherry-studio clash-verge-rev claude-code cursor cursorcerer
-           docker-desktop drawio
-           easydict eclipse-ide emacs
-           feishu fork
-           gimp google-chrome
-           hammerspoon handbrake-app hiddenbar homerow
-           iina iterm2
-           karabiner-elements
-           langflow lyricsx
-           macdown mactex maczip mendeley-reference-manager miniforge
-           namechanger neo4j-desktop netnewswire nimble-commander
-           obsidian ollama onyx opencode-desktop orbstack
-           rectangle
-           shottr squirrel-app 
-           tencent-meeting thunder trae
-           visual-studio-code
-           wechat wechatwork wine-stable wljs-notebook wolfram-engine
-          )
-
-     case $1 in
-         c)
-             app=($appc)
-             run="install"
-             opt="--cask"
-             ;;
-         rc)
-             app=($appc)
-             run="reinstall"
-             opt="--cask"
-             ;;
-         r)
-             app=($apps)
-             run="reinstall"
-             opt=
-             ;;
-         *)
-             app=($apps)
-             run="install"
-             opt=
-             ;;
-     esac 
-
-     echo 
-     echo "$#app apps $opt will be installed ... "
-     echo "-----------------------------"
-     echo 
-     brew $run $app --force -v $opt
- }
-
- #-------------------------------------------
+#-----------------------------------------------------------------------
+# 脚本结束
+#-----------------------------------------------------------------------

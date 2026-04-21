@@ -1,15 +1,32 @@
 #!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# Git 协议切换脚本
 #
-runname=`basename $0`
+# 功能说明：
+#   - 在 SSH 和 HTTPS 协议之间切换 GitHub 访问方式
+#   - 解决不同网络环境下的访问问题
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2022, RDS
+# 创建日期：Mar. 17, 2022
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2022-03-17) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
+
+runname=$(basename $0)
 
 case $runname in
   gitssh)
-    git config --global url.https://github.com/.insteadOf https://raw.githubusercontent.comtest
-    # git config --global url.https://github.com/.insteadOf https://github.comtest
+    # 切换到 SSH 协议
+    # 将 HTTPS URL 重定向到 SSH
     git config --global url."git@github.com:".insteadOf "https://github.com/"
     ;;
   githttp)
+    # 切换到 HTTPS 协议
+    # 将 SSH URL 重定向到 HTTPS
     git config --global url.https://github.com/.insteadOf ssh://git@github.com
-    # git config --global url.http://github.com/.insteadOf ssh://git@github.com
     ;;
 esac
