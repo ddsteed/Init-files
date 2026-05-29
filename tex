@@ -1,29 +1,62 @@
-#!/usr/bin/env  zsh
+#!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# LaTeX/TeXLive 管理脚本
 #
+# 功能说明：
+#   - 安装/更新 TeXLive 发行版
+#   - 配置中文 LaTeX 支持
+#   - 重建格式文件
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2022, RDS
+# 创建日期：Dec. 8, 2024
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2024-12-08) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
 case $runname in
     mactex)
+      # MacTeX 特定配置（如有需要）
       ;;
     *)
+      # 默认配置
       ;;
 esac
 
+#-----------------------------------------------------------------------
+# 函数：tex_chinese_set
+# 功能：安装中文 LaTeX 支持包
+# 用法：tex_chinese_set
+#-----------------------------------------------------------------------
 tex_chinese_set () {
-    sudo tlmgr install environ
-    sudo tlmgr install trimspaces
-    sudo tlmgr install zhnumber
-    sudo tlmgr install ctex
-    sudo tlmgr install needspace
-    sudo tlmgr install xecjk
+    sudo tlmgr install environ     # 环境变量支持
+    sudo tlmgr install trimspaces  # 空格处理
+    sudo tlmgr install zhnumber    # 中文数字
+    sudo tlmgr install ctex        # 中文文档类
+    sudo tlmgr install needspace   # 页面空间控制
+    sudo tlmgr install xecjk       # XeLaTeX 中文支持
 }
 
+#-----------------------------------------------------------------------
+# 函数：tex_update
+# 功能：更新 TeXLive 发行版
+# 用法：tex_update
+#-----------------------------------------------------------------------
 tex_update () {
-    sudo tlmgr update --self
-    sudo tlmgr update --all
+    sudo tlmgr update --self   # 更新 tlmgr 自身
+    sudo tlmgr update --all    # 更新所有包
 }
 
+#-----------------------------------------------------------------------
+# 函数：tex_fmt
+# 功能：重建所有格式文件
+# 用法：tex_fmt
+#-----------------------------------------------------------------------
 tex_fmt () {
     sudo fmtutil-sys --all
 }

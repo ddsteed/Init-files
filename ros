@@ -1,20 +1,43 @@
 #!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# ROS (Robot Operating System) 环境初始化
+#
+# 功能说明：
+#   - 根据 ROS 发行版自动加载对应环境
+#   - 支持 Foxy 源码和安装版
+#   - 自动处理 x86 架构兼容性
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2022, RDS
+# 创建日期：Jan. 28, 2022
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2022-01-28) - 初始版本，支持 Foxy
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
+# 根据调用名称设置 ROS 安装路径
 case $runname in
   foxysrc)
+    # ROS Foxy 源码编译版
     home=/opt/ros/foxy_src/install
     ;;
   foxy)
+    # ROS Foxy 官方安装版
     home=/opt/ros/foxy
     ;;
 esac
 
-os=`uname`
+# 检测操作系统
+os=$(uname)
 
+# macOS 下需要 x86 环境支持
 if [[ $os == "Darwin" ]]; then
    source ~/Init/x86
 fi
 
+# 加载 ROS 环境
 source $home/setup.zsh

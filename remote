@@ -1,26 +1,53 @@
 #!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# 远程服务器管理脚本
 #
-# remote control 
+# 功能说明：
+#   - 管理 Fatavay 项目服务器
+#   - Ngrok 内网穿透配置
+#   - SCP/Mosh/SSH 连接快捷方式
 #
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2023, RDS
+# 创建日期：Jul. 1, 2023
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2023-07-01) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
+#-----------------------------------------------------------------------
+# Ngrok Linux 安装
+#-----------------------------------------------------------------------
 ngrok_set_linux () {
-    curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null &&  echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list && sudo apt update && sudo apt install ngrok
+    curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && \
+    echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list && \
+    sudo apt update && sudo apt install ngrok
 }
 
+#-----------------------------------------------------------------------
+# Ngrok 认证令牌设置
+#-----------------------------------------------------------------------
 ngrok_token () {
     ngrok authtoken $1
 }
 
+#-----------------------------------------------------------------------
+# 远程服务器配置
+#-----------------------------------------------------------------------
 case $runname in
     fatavay)
+        # Fatavay 项目服务器 IP 配置
         fat1ip="192.168.10.10"
         fat2ip="192.168.10.20"
         fat3ip="192.168.10.30"
         fat4ip="192.168.10.40"
         fat5ip="192.168.10.50"
-        
+
+        # SSH 连接字符串
         fat1="f1@$fat1ip"
         fat2="f1@$fat2ip"
         fat3="f1@$fat3ip"
@@ -31,13 +58,16 @@ case $runname in
         port=22
         ;;
     ngrok)
+        # Ngrok 内网穿透配置
         ngfatip="0.tcp.ngrok.io"
-       port=17777
-        
+        port=17777
+
+        # 启动 Ngrok TCP 隧道
         ngrok_ini () {
             nohup ngrok tcp 22 --log=stdout > "$HOME/.ngrok2/ngrok.log" --region ap &
         }
 
+        # 通过 Ngrok 连接
         ngfat () {
             user=$1
             port=$2
@@ -47,6 +77,7 @@ case $runname in
         alias ngdcm='ngfat dcm $port'
         ;;
     shu)
+        # 书院服务器配置
         shuip="175.155.64.34"
         shu="f1@$shuip"
 
@@ -54,37 +85,33 @@ case $runname in
         ;;
 esac
 
+#-----------------------------------------------------------------------
+# 函数：cpfat
+# 功能：复制文件到远程服务器
+# 参数：$1=服务器编号 $2=本地文件路径
+# 服务器编号：1-5, s(safer), ng(ngrok), shu
+#-----------------------------------------------------------------------
 cpfat () {
     case $1 in
-        "1")
-            fat=$fat1
-            ;;
-        "2")
-            fat=$fat2
-            ;;
-        "3")
-            fat=$fat3
-            ;;
-        "4")
-            fat=$fat4
-            ;;
-        "5")
-            fat=$fat5
-            ;;
-        "s")
-            fat=$safer
-            ;;
-        ng)
-            fat=dcm@0.tcp.ap.ngrok.io
-            ;;
-        shu)
-            fat=$shu
-            ;;
+        "1") fat=$fat1 ;;
+        "2") fat=$fat2 ;;
+        "3") fat=$fat3 ;;
+        "4") fat=$fat4 ;;
+        "5") fat=$fat5 ;;
+        "s") fat=$safer ;;
+        ng) fat=dcm@0.tcp.ap.ngrok.io ;;
+        shu) fat=$shu ;;
     esac
-    
+
     scp -P $port $2 $fat:~/.
 }
 
+#-----------------------------------------------------------------------
+# 函数：mofat
+# 功能：通过 Mosh 连接到远程服务器（更稳定的 UDP 连接）
+# 参数：$1=服务器编号
+# 流程：先同步 .zshrc，再建立 Mosh 连接
+#-----------------------------------------------------------------------
 mofat () {
     if [[ $1 == 1 ]]; then fat=$fat1; fi
     if [[ $1 == 2 ]]; then fat=$fat2; fi
@@ -93,11 +120,17 @@ mofat () {
     if [[ $1 == 5 ]]; then fat=$fat5; fi
     if [[ $1 == 's' ]]; then fat=$safer; fi
     if [[ $1 == 'shu' ]]; then fat=$shu; fi
-    
+
     cpfat $1 ~/.zshrc
     mosh $fat
 }
 
+#-----------------------------------------------------------------------
+# 函数：shfat
+# 功能：通过 SSH 连接到远程服务器（支持 X11 转发）
+# 参数：$1=服务器编号
+# 流程：先同步 .zshrc，再建立 SSH 连接
+#-----------------------------------------------------------------------
 shfat () {
     if [[ $1 == 1 ]]; then fat=$fat1; fi
     if [[ $1 == 2 ]]; then fat=$fat2; fi
@@ -106,15 +139,24 @@ shfat () {
     if [[ $1 == 5 ]]; then fat=$fat5; fi
     if [[ $1 == 's' ]]; then fat=$safer; fi
     if [[ $1 == 'shu' ]]; then fat=$shu; fi
-    
+
     cpfat $1 ~/.zshrc
     ssh -X -Y $fat
 }
 
+#-----------------------------------------------------------------------
+# 函数：shufat
+# 功能：连接到书院服务器（h14 用户）
+#-----------------------------------------------------------------------
 shufat () {
   ssh -X -Y h14@175.155.64.34
 }
 
+#-----------------------------------------------------------------------
+# 函数：upfat
+# 功能：打包并上传文件到远程服务器
+# 参数：$1=本地文件/目录 $2=服务器编号
+#-----------------------------------------------------------------------
 upfat () {
     tar zcvf xxx.tgz $1
     cpfat $2 ./xxx.tgz

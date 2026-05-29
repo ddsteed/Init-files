@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(typeset)",
+      "Bash(zsh -n ~/.zshrc 2>&1)",
+      "Bash(zsh -c 'set -e; typeset -g RPROMPT= RPS1= RPS2=; echo \"Step 1 OK\"')",
+      "Bash(zsh -c 'source ~/.zshrc 2>&1')",
+      "Bash(zsh -c 'typeset -f _defer_async_git_register')",
+      "Bash(zsh -n ~/.oh-my-zsh/lib/git.zsh 2>&1)",
+      "Bash(zsh -c 'setopt xtrace; source ~/.zshrc 2>&1')",
+      "Bash(ls:*)",
+      "Bash(git -C ~/.p10k fetch)",
+      "Bash(git -C ~/.p10k pull origin master)",
+      "Bash(echo:*)",
+      "Read(//Users/fengh/Init/**)",
+      "Bash(zsh /tmp/test_zshrc.sh)",
+      "Bash(dscl:*)",
+      "Bash(defaults read:*)",
+      "Bash(plutil -p ~/Library/Preferences/com.googlecode.iterm2.plist)",
+      "Bash(zsh -n /Users/fengh/Init/brew)",
+      "Bash(for f:*)",
+      "Bash(do zsh:*)",
+      "Bash(done)"
+    ]
+  }
+}

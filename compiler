@@ -1,39 +1,73 @@
-#!/usr/bin/env  zsh
+#!/usr/bin/env zsh
+#-----------------------------------------------------------------------
+# 编译器环境配置脚本
 #
+# 功能说明：
+#   - 配置 Intel oneAPI 工具链
+#   - 配置 LLVM/Clang 编译器
+#   - 配置 Java 开发环境（JDK/Maven/Gradle/Spring Boot）
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2022, RDS
+# 创建日期：Apr. 11, 2022
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2022-04-11) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
+#-----------------------------------------------------------------------
+# ARM64 架构的 brew 包装函数
+#-----------------------------------------------------------------------
 abrew () {
     arch -arm64e /opt/homebrew/bin/brew $@
 }
 
 case $runname in
   intel)
-      source /opt/intel/oneapi/setvars.sh 
+      # Intel oneAPI 工具链初始化
+      source /opt/intel/oneapi/setvars.sh
       ;;
   llvm)
+      # LLVM/Clang 编译器配置
       export LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib $LDFLAGS"
       export CPPFLAGS="-I/usr/local/opt/llvm/include $CPPFLAGS"
       export PATH="/usr/local/opt/llvm/bin:$PATH"
       ;;
   java)
+      # Java 开发环境配置
+
+      # JDK 路径（通过 Homebrew 安装的 OpenJDK）
       export JAVA_HOME=$(abrew --prefix openjdk)
+      # 或者使用 Zulu JDK：
       # export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+
+      # CLASSPATH 配置
       export CLASSPATH=.:$JAVA_HOME/libexec:$JAVA_HOME/lib:$CLASSPATH
       export PATH=$JAVA_HOME/bin:$PATH
-      
+
+      # Maven 配置
       export MAVEN_HOME=$(abrew --prefix maven)
       export M2_HOME=$(abrew --prefix maven)
       export PATH=$MAVEN_HOME/bin:$PATH
-      
+
+      # Maven Daemon (mvnd) 配置
       export MAVEND_HOME=$(abrew --prefix mvnd)
       export PATH=$MAVEND_HOME/bin:$PATH
-      
+
+      # Spring Boot CLI 配置
       export PATH=$(abrew --prefix spring-boot)/bin:$PATH
+
+      # Gradle 配置
       export PATH=$(abrew --prefix gradle)/bin:$PATH
-      
+
+      # IntelliJ IDEA CE 别名
       alias idea='/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS/idea'
       ;;
   *)
+      # 默认：无操作
       ;;
 esac

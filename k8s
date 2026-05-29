@@ -1,45 +1,66 @@
-#!/usr/bin/env   bash
+#!/usr/bin/env bash
+#-----------------------------------------------------------------------
+# Kubernetes (K8s) 命令别名配置
+#
+# 功能说明：
+#   - Minikube 本地 K8s 集群管理别名
+#   - Kubectl 命令行工具别名
+#
+# 作者：     Hao Feng (F1)
+# 版权：     (c) 2023, RDS
+# 创建日期：Feb. 28, 2023
+# 最后更新：Mar. 20, 2025
+#
+# 版本历史：
+#   v1.0.0 (2023-02-28) - 初始版本
+#   v1.1.0 (2025-03-20) - 添加完整的中文注释和版本历史
+#-----------------------------------------------------------------------
 
-runname=`basename $0`
+runname=$(basename $0)
 
-#---
-# minikube
-alias mk='minikube'
-alias mkk='minikube kubectl'
-alias mkrm='minikube delete'
-alias mks='minikube start'
-alias mksp='minikube stop'
-alias mkst='minikube status'
+#-----------------------------------------------------------------------
+# Minikube - 本地 Kubernetes 集群
+#-----------------------------------------------------------------------
+alias mk='minikube'              # Minikube 简写
+alias mkk='minikube kubectl'     # 使用 Minikube 的 kubectl
+alias mkrm='minikube delete'     # 删除集群
+alias mks='minikube start'       # 启动集群
+alias mksp='minikube stop'       # 停止集群
+alias mkst='minikube status'     # 查看状态
 
+# 显示所有 Minikube 别名
 mkhelp () {
     alias | grep mk
 }
 
+# 启动 Minikube（自定义配置）
 mkstart () {
     minikube start \
              --cpus=4 \
              --memory=6144 \
-             --image-mirror-country='cn' 
+             --image-mirror-country='cn'
 }
 
-#---
-# kubectl
-alias kb='kubectl'
-alias kba='kubectl apply -f'
-alias kbc='kubectl create'
-alias kbcf='kubectl create -f'
-alias kbcn='kubectl create namespace'
-alias kbcon='kubectl config'
-alias kbd='kubectl describe'
-alias kbg='kubectl get'
-alias kbgn='kubectl get namespaces'
-alias kbgnd='kubectl get nodes'
-alias kbgp='kubectl get pods'
-alias kbr='kubectl run'
-alias kbrm='kubectl delete'
-alias kbrmn='kubectl delete namespaces'
-alias kbrmp='kubectl delete pod'
+#-----------------------------------------------------------------------
+# Kubectl - Kubernetes 命令行工具
+#-----------------------------------------------------------------------
+alias kb='kubectl'                # Kubectl 简写
+alias kba='kubectl apply -f'      # 应用配置
+alias kbc='kubectl create'        # 创建资源
+alias kbcf='kubectl create -f'    # 从文件创建
+alias kbcn='kubectl create namespace'  # 创建命名空间
+alias kbcon='kubectl config'      # 配置管理
+alias kbd='kubectl describe'      # 查看详情
+alias kbg='kubectl get'           # 获取资源
+alias kbgn='kubectl get namespaces'  # 获取命名空间
+alias kbgnd='kubectl get nodes'   # 获取节点
+alias kbgp='kubectl get pods'     # 获取 Pod
+alias kbr='kubectl run'           # 运行 Pod
+alias kbrm='kubectl delete'       # 删除资源
+alias kbrmn='kubectl delete namespaces'  # 删除命名空间
+alias kbrmp='kubectl delete pod'  # 删除 Pod
 
+# 显示所有 Kubectl 别名
 kbhelp () {
     alias | grep kb
 }
